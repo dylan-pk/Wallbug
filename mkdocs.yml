@@ -1,7 +1,7 @@
 site_name: Wallbot System Development
 site_description: Investor-ready demonstration platform for Wallbot — plant surveying robot and smart city green wall technology.
-site_url: https://example.github.io/wallbug
-repo_url: https://github.com/YourOrg/Wallbug
+site_url: https://dylan-pk.github.io/Wallbug
+repo_url: https://github.com/dylan-pk/Wallbug
 theme:
   name: material
   language: en
