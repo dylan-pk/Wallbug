@@ -4,8 +4,10 @@
 
 ![Overview](https://img.shields.io/badge/Overview-%23184E77?style=for-the-badge&logoColor=white)
 
-The **Wallbot System Development** aims to further develop and improve the current Wallbot system into a fully functional **demonstration platform**.  
-Wallbug is designed to traverse vertical surfaces and demonstrate its role as a **plant surveying robot**, equipped with on-board sensors to monitor plant health and density.  
+The **Wallbot System Development** project aims to further develop and improve the current Wallbot into a fully functional **demonstration platform**.  
+The **Wallbug Team** is responsible for the design and implementation of Wallbot.  
+
+The system is designed to traverse vertical surfaces and demonstrate its role as a **plant surveying robot**, equipped with on-board sensors to monitor plant health and density.  
 
 The end goal is to deliver an **investor-ready demo unit** that showcases technical capabilities, safety, and public appeal, while also serving as a stepping stone for **smart city green wall technologies**.  
 
@@ -24,7 +26,7 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 ![Scope](https://img.shields.io/badge/Scope-%23669EBC?style=for-the-badge&logoColor=white)
 
 **In-Scope**  
-- Robot movement and motor control  
+- Wallbot movement and motor control  
 - Wireless communication and control  
 - Sensor integration and visual output  
 - Mechanical shell redesign  
@@ -95,7 +97,7 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
    pip install -r requirements.txt
    ```
 
-3. Run the UI demo:  
+3. Run the Wallbot UI demo:  
    ```bash
    python ui/main.py
    ```
@@ -112,7 +114,7 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 | **Anton Cecire**   | Interface Lead          | UI design, interface integration                                |
 | **Benjamin Cooper**| Movement Lead           | Wallbot movement, subsystem integration                         |
 | **Connor Williams**| Industrial Comms Lead   | Motor communication (CANBus), firmware/software comms           |
-| **Dylan Purbrick** | Wallbug Team Lead       | Organisation, documentation, client liaison                     |
+| **Dylan Purbrick** | Team Lead               | Organisation, documentation, client liaison                     |
 | **Fadi Alameddine**| Mechanical Design Lead  | Mechanical design, CAD, prototyping                             |
 
 ### Extended Contributors  
