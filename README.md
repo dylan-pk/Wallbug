@@ -86,7 +86,7 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/YourOrg/Wallbug.git
+   git clone https://github.com/dylan-pk/Wallbug.git
    cd Wallbug
    ```
 
