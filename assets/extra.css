@@ -1,0 +1,53 @@
+/* ---- Wallbug custom theming for MkDocs Material ---- */
+:root {
+  --wb-green: #3A5A40;
+  --wb-sage:  #A3B18A;
+  --wb-light: #EAE8E2;
+  --wb-blue:  #669EBC;
+  --wb-deep:  #184E77;
+
+  /* Material overrides */
+  --md-primary-fg-color: var(--wb-green);
+  --md-accent-fg-color:  var(--wb-blue);
+}
+
+/* Typography */
+:root, body {
+  font-feature-settings: "liga" 1, "kern" 1;
+}
+.md-typeset {
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+.md-typeset code, .md-typeset pre, code, kbd, samp {
+  font-family: "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+/* Headings and links */
+.md-typeset h1, .md-typeset h2, .md-typeset h3, .md-typeset h4 {
+  color: var(--wb-deep);
+}
+.md-typeset a {
+  color: var(--wb-blue);
+}
+.md-typeset a:hover {
+  color: var(--wb-deep);
+  text-decoration: underline;
+}
+
+/* Tables */
+.md-typeset table:not([class]) thead th {
+  background: var(--wb-deep);
+  color: #fff;
+}
+.md-typeset table:not([class]) tbody tr:nth-child(odd) td {
+  background: var(--wb-light);
+}
+.md-typeset table:not([class]) tbody tr:nth-child(even) td {
+  background: var(--wb-sage);
+}
+
+/* Accent pills (optional utility classes) */
+.pill { display:inline-block; padding:.35rem .7rem; border-radius:9999px; font-weight:600; }
+.pill-green { background: var(--wb-green); color:#fff; }
+.pill-blue  { background: var(--wb-blue);  color:#fff; }
+.pill-sage  { background: var(--wb-sage);  color:#000; }
