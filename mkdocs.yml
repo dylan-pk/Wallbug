@@ -1,0 +1,27 @@
+site_name: Wallbot System Development
+site_description: Investor-ready demonstration platform for Wallbot — plant surveying robot and smart city green wall technology.
+site_url: https://example.github.io/wallbug
+repo_url: https://github.com/YourOrg/Wallbug
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.tabs
+    - navigation.instant
+    - navigation.tracking
+    - content.code.copy
+    - content.action.edit
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+  font:
+    text: Inter
+    code: JetBrains Mono
+extra_css:
+  - assets/extra.css
+
+nav:
+  - Home: index.md
