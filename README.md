@@ -84,11 +84,11 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 **Wallbug colour palette**  
 | Colour Name   | Hex Code   | Swatch |
 |---------------|------------|--------|
-| Dark Green    | `#3A5A40`  | ![Dark Green](https://img.shields.io/badge/-------%233A5A40?style=flat-square) |
-| Sage Green    | `#A3B18A`  | ![Sage Green](https://img.shields.io/badge/-------%23A3B18A?style=flat-square) |
-| Light Neutral | `#EAE8E2`  | ![Light Neutral](https://img.shields.io/badge/-------%23EAE8E2?style=flat-square) |
-| Blue          | `#669EBC`  | ![Blue](https://img.shields.io/badge/-------%23669EBC?style=flat-square) |
-| Deep Blue     | `#184E77`  | ![Deep Blue](https://img.shields.io/badge/-------%23184E77?style=flat-square) |
+| Dark Green    | `#3A5A40`  | ![Dark Green](https://img.shields.io/badge/-------?style=flat-square&labelColor=3A5A40&color=3A5A40&logoColor=3A5A40) |
+| Sage Green    | `#A3B18A`  | ![Sage Green](https://img.shields.io/badge/-------?style=flat-square&labelColor=A3B18A&color=A3B18A&logoColor=A3B18A) |
+| Light Neutral | `#EAE8E2`  | ![Light Neutral](https://img.shields.io/badge/-------?style=flat-square&labelColor=EAE8E2&color=EAE8E2&logoColor=EAE8E2) |
+| Blue          | `#669EBC`  | ![Blue](https://img.shields.io/badge/-------?style=flat-square&labelColor=669EBC&color=669EBC&logoColor=669EBC) |
+| Deep Blue     | `#184E77`  | ![Deep Blue](https://img.shields.io/badge/-------?style=flat-square&labelColor=184E77&color=184E77&logoColor=184E77) |
 
 ---
 
