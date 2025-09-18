@@ -82,13 +82,13 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 ![Visual Identity](https://img.shields.io/badge/Visual_Identity-%23669EBC?style=for-the-badge&logoColor=white)
 
 **Wallbug colour palette**  
-| Colour Name   | Hex Code   | Swatch |
-|---|---|---|
-| Dark Green    | `#3A5A40`  | ![Dark Green](https://img.shields.io/badge/----?style=flat-square&labelColor=3A5A40&color=3A5A40&logoColor=3A5A40) |
-| Sage Green    | `#A3B18A`  | ![Sage Green](https://img.shields.io/badge/----?style=flat-square&labelColor=A3B18A&color=A3B18A&logoColor=A3B18A) |
-| Light Neutral | `#EAE8E2`  | ![Light Neutral](https://img.shields.io/badge/----?style=flat-square&labelColor=EAE8E2&color=EAE8E2&logoColor=EAE8E2) |
-| Blue          | `#669EBC`  | ![Blue](https://img.shields.io/badge/----?style=flat-square&labelColor=669EBC&color=669EBC&logoColor=669EBC) |
-| Deep Blue     | `#184E77`  | ![Deep Blue](https://img.shields.io/badge/----?style=flat-square&labelColor=184E77&color=184E77&logoColor=184E77) |
+| Colour Name   | Hex Code   | Swatch |   
+|---|---|---|   
+| Dark Green    | `#3A5A40`  | ![Dark Green](https://img.shields.io/badge/----?style=flat-square&labelColor=3A5A40&color=3A5A40&logoColor=3A5A40) |   
+| Sage Green    | `#A3B18A`  | ![Sage Green](https://img.shields.io/badge/----?style=flat-square&labelColor=A3B18A&color=A3B18A&logoColor=A3B18A) |   
+| Light Neutral | `#EAE8E2`  | ![Light Neutral](https://img.shields.io/badge/----?style=flat-square&labelColor=EAE8E2&color=EAE8E2&logoColor=EAE8E2) |   
+| Blue          | `#669EBC`  | ![Blue](https://img.shields.io/badge/----?style=flat-square&labelColor=669EBC&color=669EBC&logoColor=669EBC) |   
+| Deep Blue     | `#184E77`  | ![Deep Blue](https://img.shields.io/badge/----?style=flat-square&labelColor=184E77&color=184E77&logoColor=184E77) |   
 
 ---
 
