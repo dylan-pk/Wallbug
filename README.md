@@ -84,11 +84,11 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 **Wallbug colour palette**  
 | Colour Name   | Hex Code   | Swatch                                                                 |
 |---------------|------------|------------------------------------------------------------------------|
-| Dark Green    | `#3A5A40`  | ![3A5A40](https://img.shields.io/badge/Visual_Identity-%23669EBC?style=for-the-badge&logoColor=green)        |
+| Dark Green    | `#3A5A40`  | ![3A5A40](https://img.shields.io/badge/%3A5A40?style=for-the-badge&logoColor=green)        |
 | Sage Green    | `#A3B18A`  | ![A3B18A](https://via.placeholder.com/20/A3B18A/000000?text=+)        |
 | Light Neutral | `#EAE8E2`  | ![#EAE8E2](https://via.placeholder.com/20/EAE8E2/000000?text=+)        |
 | Blue          | `#669EBC`  | ![#669EBC](https://via.placeholder.com/20/669EBC/000000?text=+)        |
-| Deep Blue     | `#184E77`  | ![#184E77](https://via.placeholder.com/20/184E77/000000?text=+)        |
+| Deep Blue     | `#184E77`  | ![Deep Blue](https://img.shields.io/badge/--%23184E77?style=flat-square)        |
 
 ---
 
