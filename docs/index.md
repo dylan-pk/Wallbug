@@ -77,22 +77,10 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 - **Mechatronics**: Motor control (speed/motion), path planning, stability  
 - **UI**: Wireless control, real-time sensor display  
 
----
-
-![Visual Identity](https://img.shields.io/badge/Visual_Identity-%23669EBC?style=for-the-badge&logoColor=white)
-
-**Wallbug colour palette**  
-| Colour Name      | Hex Code   | Swatch    |   
-|------------------|------------|-----------|   
-| Dark Green       | `#3A5A40`  | ![Dark Green](https://img.shields.io/badge/----?style=flat-square&labelColor=3A5A40&color=3A5A40&logoColor=3A5A40) |   
-| Sage Green       | `#A3B18A`  | ![Sage Green](https://img.shields.io/badge/----?style=flat-square&labelColor=A3B18A&color=A3B18A&logoColor=A3B18A) |   
-| Light Neutral    | `#EAE8E2`  | ![Light Neutral](https://img.shields.io/badge/----?style=flat-square&labelColor=EAE8E2&color=EAE8E2&logoColor=EAE8E2) |   
-| Blue             | `#669EBC`  | ![Blue](https://img.shields.io/badge/----?style=flat-square&labelColor=669EBC&color=669EBC&logoColor=669EBC) |   
-| Deep Blue        | `#184E77`  | ![Deep Blue](https://img.shields.io/badge/----?style=flat-square&labelColor=184E77&color=184E77&logoColor=184E77) |   
 
 ---
 
-![Getting Started](https://img.shields.io/badge/Getting_Started-%23A3B18A?style=for-the-badge&logoColor=black)
+![Getting Started](https://img.shields.io/badge/Getting_Started-%23669EBC?style=for-the-badge&logoColor=white)
 
 1. Clone the repository:  
    ```bash
@@ -112,7 +100,7 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 
 ---
 
-![Team](https://img.shields.io/badge/Team_%26_Contributors-%23184E77?style=for-the-badge&logoColor=white)
+![Team](https://img.shields.io/badge/Team_%26_Contributors-%23A3B18A?style=for-the-badge&logoColor=black)
 
 ### The Wallbug Team  
 
@@ -140,13 +128,13 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 
 ---
 
-![Documentation](https://img.shields.io/badge/Documentation-%23669EBC?style=for-the-badge&logoColor=white)
+![Documentation](https://img.shields.io/badge/Documentation-%23184E77?style=for-the-badge&logoColor=white)
 
 All supporting materials, including CAD files, technical documentation, and meeting records, will be organised within the DMMS MS Teams dedicated Wallbot System Development Channel.  
 Critical files such as ROS packages and further code elements will be stored within their respective folders.  
 
 ---
 
-![License](https://img.shields.io/badge/License-%233A5A40?style=for-the-badge&logoColor=white)
+![License](https://img.shields.io/badge/License-%23669EBC?style=for-the-badge&logoColor=white)
 
 This project is currently unlicensed. All rights reserved to the Wallbug team and collaborators.  
