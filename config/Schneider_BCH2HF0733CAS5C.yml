@@ -1,0 +1,11 @@
+motor:
+  voltage: 220
+  current: 4.5
+  max_current_irms: 13.23
+  power: 750
+  continuous_stall_torque: null
+  nominal_speed: 3000
+  nominal_torque: 2.39
+  rotor_inertia: 1.54
+  max_radial_force: 332
+  max_axial_force: 115

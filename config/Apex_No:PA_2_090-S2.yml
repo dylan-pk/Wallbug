@@ -1,0 +1,10 @@
+gearbox:
+  gear_ratio: 50
+  nominal_output_torque: 123
+  nominal_input_speed: 3600
+  max_input_speed: 6000
+  max_radial_load: 1530
+  max_axial_load: 765
+  max_tilting_moment: 55
+  efficiency: 94.00
+  inertia: null

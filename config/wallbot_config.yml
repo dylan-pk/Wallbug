@@ -1,0 +1,14 @@
+wallbot:
+  weight: 12
+  load_inertia: null
+  pulley_mass: null
+  pulley_inertia: null
+
+environment:
+  wall_width: 4
+  wall_height: 4
+  pulley_radius: 0.1
+
+current_position:
+  x: 2
+  y: 2
