@@ -1,4 +1,4 @@
-#Plant GUI
+# Plant GUI
 
 To run the Plant GUI first ensure that both plant_gui.py and plantColour.cpp are in the same directory.
 
