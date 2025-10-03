@@ -1,29 +1,30 @@
+import math
 
-class MotorController():
-
-    def __init__(self,
-                 wallbot_specs,
-                 winches
-                 ):
+class MotorController:
+    def __init__(self, wallbot_specs, winches):
         self.wallbot_specs = wallbot_specs
-        self.winches = winches
+        self.winches = winches  # list of Winch objects
 
     def compute_goal(self, current_pose, goal_pose):
-        #rope lengths        
         current_rope_lengths = self.compute_rope_lengths(current_pose)
         target_rope_lengths = self.compute_rope_lengths(goal_pose)
-
         delta_rope_lengths = self.compute_rope_length_deltas(current_rope_lengths, target_rope_lengths)
 
-    
+        # Publish new rope lengths
+        for winch, length in zip(self.winches, target_rope_lengths):
+            winch.publish_rope_length(length)
+
+        return delta_rope_lengths
 
     def compute_rope_lengths(self, pose):
-        '''
-        computes the rope lenghts needed for given pose
-        '''
-        w1, w2, w3, w4 = 1
-        return w1, w2, w3, w4
-    
-    def compute_rope_length_deltas(self, current_rope_lengths, target_rope_lengths):
-        pass
+        rope_lengths = []
+        for winch in self.winches:
+            wx, wy = winch.get_position()
+            dx = pose[0] - wx
+            dy = pose[1] - wy
+            length = math.sqrt(dx**2 + dy**2)
+            rope_lengths.append(length)
+        return rope_lengths
 
+    def compute_rope_length_deltas(self, current_rope_lengths, target_rope_lengths):
+        return [target - current for current, target in zip(current_rope_lengths, target_rope_lengths)]
