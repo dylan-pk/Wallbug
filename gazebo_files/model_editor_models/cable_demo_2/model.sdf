@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <sdf version='1.7'>
-  <model name='Winch'>
+  <model name='cable_demo_2'>
     <link name='link'>
       <inertial>
         <mass>1</mass>
@@ -18,12 +18,12 @@
       <enable_wind>0</enable_wind>
       <kinematic>0</kinematic>
       <pose>0 0 0 0 -0 0</pose>
-      <gravity>1</gravity>
+      <gravity>0</gravity>
       <visual name='visual'>
         <geometry>
           <cylinder>
-            <radius>0.1</radius>
-            <length>0.4</length>
+            <radius>0.01</radius>
+            <length>4</length>
           </cylinder>
         </geometry>
         <material>
@@ -34,7 +34,7 @@
           <shader type='pixel'>
             <normal_map>__default__</normal_map>
           </shader>
-          <ambient>0.1 0.5 0.5 1</ambient>
+          <ambient>0 0 0 1</ambient>
           <diffuse>0.7 0.7 0.7 1</diffuse>
           <specular>0.01 0.01 0.01 1</specular>
           <emissive>0 0 0 1</emissive>
@@ -49,8 +49,8 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <cylinder>
-            <radius>0.1</radius>
-            <length>0.4</length>
+            <radius>0.01</radius>
+            <length>4</length>
           </cylinder>
         </geometry>
         <surface>
@@ -77,7 +77,7 @@
             <threshold>1e+06</threshold>
           </bounce>
           <contact>
-            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact>1</collide_without_contact>
             <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
             <collide_bitmask>1</collide_bitmask>
             <ode>
@@ -100,7 +100,7 @@
         </surface>
       </collision>
     </link>
-    <static>1</static>
+    <static>0</static>
     <allow_auto_disable>1</allow_auto_disable>
   </model>
 </sdf>
