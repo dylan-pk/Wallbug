@@ -4,7 +4,8 @@ import os
 import yaml
 import rclpy
 from geometry_msgs.msg import PoseStamped
-from wallbot import Wallbot
+from src.wallbot_node import Wallbot
+from wallbot.srv import SetGoal
 import threading
 import time
 
@@ -24,10 +25,9 @@ def load_yaml(file_path):
         return yaml.safe_load(f)
 
 
-def run_demo_once(publisher, path_goals, node):
-    """Publish each goal in path_goals to the wallbot/goal topic."""
+def run_demo_once(service_client, path_goals, node):
+    """Send each goal in path_goals via service call to wallbot/set_goal."""
     for goal in path_goals:
-        #if wallbot pose == goal pose send next goal else do nothing - check to maker sure first goal has been sent 
         try:
             x = float(goal[0])
             y = float(goal[1])
@@ -44,15 +44,31 @@ def run_demo_once(publisher, path_goals, node):
         msg.pose.position.z = z
         msg.pose.orientation.w = 1.0
 
-        node.get_logger().info(f"Publishing goal: [{x}, {y}, {z}]")
-        publisher.publish(msg)
+        request = SetGoal.Request()
+        request.goal = msg
+
+        node.get_logger().info(f"Sending goal via service: [{x}, {y}, {z}]")
+
+        future = service_client.call_async(request)
+
+        # Wait for result
+        rclpy.spin_until_future_complete(node, future, timeout_sec=5.0)
+
+        if future.result() is not None:
+            if future.result().accepted:
+                node.get_logger().info("Goal accepted by Wallbot.")
+            else:
+                node.get_logger().warn("Goal rejected by Wallbot.")
+        else:
+            node.get_logger().error("Service call failed or timed out.")
+
         time.sleep(1.0)
 
     return True
 
 
 def wallbot_spin(wallbot_node):
-    """Run rclpy.spin in a separate thread for Wallbot subscriber callbacks."""
+    """Run rclpy.spin_once in a separate thread for the Wallbot node."""
     while rclpy.ok():
         rclpy.spin_once(wallbot_node, timeout_sec=0.1)
 
@@ -60,7 +76,7 @@ def wallbot_spin(wallbot_node):
 def main():
     rclpy.init()
 
-    print("Starting Wallbot Demo...")
+    print("Starting Wallbot Demo with Service...")
 
     motor_params = load_yaml(os.path.join(CONFIG_DIRECTORY, MOTOR_FILE))
     gearbox_params = load_yaml(os.path.join(CONFIG_DIRECTORY, GEARBOX_FILE))
@@ -73,13 +89,20 @@ def main():
 
     wallbot = Wallbot(wallbot_specs, gearbox_params, motor_params, WALLBOT_STARTING_POSE)
 
-    # Create publisher
-    publisher = wallbot.create_publisher(PoseStamped, 'wallbot/goal', 10)
-
+    # Start spinning the Wallbot node in the background
     wallbot_thread = threading.Thread(target=wallbot_spin, args=(wallbot,), daemon=True)
     wallbot_thread.start()
 
-    run_demo_once(publisher, path_goals, wallbot)
+    # Wait until the service is available
+    wallbot.get_logger().info("Waiting for 'wallbot/set_goal' service to become available...")
+    client = wallbot.create_client(SetGoal, 'wallbot/set_goal')
+    if not client.wait_for_service(timeout_sec=5.0):
+        wallbot.get_logger().error("Service 'wallbot/set_goal' not available. Exiting.")
+        rclpy.shutdown()
+        return
+
+    # Run the demo
+    run_demo_once(client, path_goals, wallbot)
 
     # Shutdown
     wallbot.destroy_node()

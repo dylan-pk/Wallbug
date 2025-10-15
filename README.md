@@ -150,3 +150,11 @@ Critical files such as ROS packages and further code elements will be stored wit
 ![License](https://img.shields.io/badge/License-%233A5A40?style=for-the-badge&logoColor=white)
 
 This project is currently unlicensed. All rights reserved to the Wallbug team and collaborators.  
+
+
+
+colcon build --packages-select wallbot
+
+source install/setup.bash
+
+ros2 run wallbot demo

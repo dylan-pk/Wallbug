@@ -1,25 +1,25 @@
 from std_msgs.msg import Float64
+from utils import SystemState
+
+class WinchProfile():
+    d = 1
+    f = 4
 
 class Winch:
-    def __init__(self, winch_id, motor_specs, gearbox_specs, parent_node, position):
-        self.winch_id = winch_id
-        self.motor_specs = motor_specs
-        self.gearbox_specs = gearbox_specs
+    def __init__(self, winch_id, winch_profile, wallbot_node, position):
+        self.id = winch_id
+        self.profile = winch_profile
         self.position = position  # [x, y]
-        self.parent_node = parent_node
+        self.wallbot_node = wallbot_node
+        self.state = SystemState.IDLE
+
+        self.trajectory = None
 
         # Publisher for rope length
-        self.publisher = self.parent_node.create_publisher(Float64, f'winch_{winch_id}/rope_length', 10)
+        self.publisher = self.wallbot_node.create_publisher(Float64, f'winch_{winch_id}/trajectory', 10)
 
-    def get_position(self):
-        return self.position
-
-    def set_position(self, position):
-        self.position = position
-
-    def publish_rope_length(self, length):
-        from std_msgs.msg import Float64
+    def publish_trajectory(self, length):
         msg = Float64()
         msg.data = float(length)
         self.publisher.publish(msg)
-        self.parent_node.get_logger().info(f"Winch {self.winch_id} publishing rope length: {length}")
+        self.wallbot_node.get_logger().info(f"Winch {self.id} publishing rope length: {length}")
