@@ -2,8 +2,19 @@ from std_msgs.msg import Float64
 from utils import SystemState
 
 class WinchProfile():
-    d = 1
-    f = 4
+    motor_output_power = None
+    gearbox_output_speed = None
+    gearbox_max_speed = 4
+    gearbox_output_torque = None
+    motor_torque_max_current = None
+    relfected_inertia = None
+    gearbox_output_power = None
+    max_linear_acceleration = None
+    nominal_angular_velocity = None
+    max_angular_velocity = None
+    max_linear_velocity = None
+    gearbox_at_max_current = None
+    max_angular_acceleration = None
 
 class Winch:
     def __init__(self, winch_id, winch_profile, wallbot_node, position):

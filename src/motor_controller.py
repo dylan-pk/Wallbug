@@ -1,6 +1,7 @@
 import math
 from winch import Winch, WinchProfile
 from geometry_msgs.msg import PoseStamped
+import calcUtils
 
 class MotorController():
     def __init__(self, wallbot_specs, gearbox_specs, motor_specs, num_winches = 4):
@@ -9,29 +10,49 @@ class MotorController():
         self.motor_specs = motor_specs
         self.winches = []
         self.num_winches = num_winches
+        self.winch_profile = self.generate_winch_profile(gearbox_specs, motor_specs)
 
         self.generate_winches()
 
-    def generate_winch_profile():
-        pass
+    def generate_winch_profile(self):
+        profile = WinchProfile
+        profile.motor_output_power = None
+        profile.gearbox_output_speed = None
+        profile.gearbox_max_speed = 4
+        profile.gearbox_output_torque = None
+        profile.motor_torque_max_current = None
+        profile.relfected_inertia = None
+        profile.gearbox_output_power = None
+        profile.nominal_linear_velocity = None
+        profile.nominal_angular_velocity = None
+        profile.max_angular_velocity = None
+        profile.max_linear_velocity = None
+        profile.gearbox_at_max_current = None
+        profile.max_angular_acceleration = None
+        return profile
     
     def generate_winches(self):
         default_positions = [(0,0,0), (5,0,0), (5,5,0), (0,5,0)]  # Example positions
         for i in range(self.num_winches):
-            winch = Winch(i, self.motor_specs, self.gearbox_specs, wallbot_node=self, position=default_positions[i])
+            winch = Winch(i, 
+                          self.motor_specs, 
+                          self.gearbox_specs, 
+                          wallbot_node=self, 
+                          position=default_positions[i]
+                          )
             self.winches.append(winch)
 
     
-    def compute_trajecotires(self, goal, current_pose,):
+    def compute_trajectories(self, goal, current_pose,):
         current_rope_lengths = self.compute_rope_lengths(current_pose)
         target_rope_lengths = self.compute_rope_lengths(goal)
         delta_rope_lengths = self.compute_rope_length_deltas(current_rope_lengths, target_rope_lengths)
+        largest_delta = max(delta_rope_lengths)
+        move_time = largest_delta / self.winch_profile.nominal_linear_velocity
 
         # Publish new rope lengths
         for winch, length in zip(self.winches, target_rope_lengths):
             winch.publish_rope_length(length)
-
-        return delta_rope_lengths
 
     def compute_rope_lengths(self, pose):
         rope_lengths = []
@@ -48,11 +69,11 @@ class MotorController():
     
     def send_trajecotries(self):
         '''
-        trajecotires are only sent if all winches are provided with trajecotires 
+        trajectories are only sent if all winches are provided with trajectories 
         '''
         for winch in self.winches:
             if winch.read_trajecotry() == None:
-                print(f"[ERROR] Send trajecotires FAILED. Winch {winch.id} does not have a valid trajectorie!")
+                print(f"[ERROR] Send trajectories FAILED. Winch {winch.id} does not have a valid trajectorie!")
         
         for winch in self.winches:
             winch.publish_trjectory()
