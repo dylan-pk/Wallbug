@@ -1,5 +1,6 @@
 from std_msgs.msg import Float64
 from utils import SystemState
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 class WinchProfile():
     motor_output_power = None
@@ -26,11 +27,28 @@ class Winch:
 
         self.trajectory = None
 
-        # Publisher for rope length
-        self.publisher = self.wallbot_node.create_publisher(Float64, f'winch_{winch_id}/trajectory', 10)
+        # Publisher for traj.
+        self.publisher = self.wallbot_node.create_publisher(JointTrajectory, f'winch_{winch_id}/trajectory', 10)
 
-    def publish_trajectory(self, length):
-        msg = Float64()
-        msg.data = float(length)
-        self.publisher.publish(msg)
-        self.wallbot_node.get_logger().info(f"Winch {self.id} publishing rope length: {length}")
+    def publish_trajectory(self, trajectory, total_time=None):
+        """
+        Publish a full rope length trajectory as a JointTrajectory message.
+        """
+        traj_msg = JointTrajectory()
+        traj_msg.joint_names = [f'winch_{self.id}_rope']
+
+        n_points = len(trajectory)
+        if total_time is None:
+            total_time = n_points * 0.01  # default to 0.01s per step
+
+        dt = total_time / n_points
+
+        for i, length in enumerate(trajectory):
+            point = JointTrajectoryPoint()
+            point.positions = [float(length)]
+            point.time_from_start.sec = int(i * dt)
+            point.time_from_start.nanosec = int((i * dt % 1) * 1e9)
+            traj_msg.points.append(point)
+
+        self.publisher.publish(traj_msg)
+        self.wallbot_node.get_logger().info(f"Winch {self.id} publishing trajectory with {n_points} points")

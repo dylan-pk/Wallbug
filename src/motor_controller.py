@@ -2,6 +2,7 @@ import math
 from winch import Winch, WinchProfile
 from geometry_msgs.msg import PoseStamped
 import calcUtils
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 class MotorController():
     def __init__(self, wallbot_specs, gearbox_specs, motor_specs, num_winches = 4):
@@ -43,16 +44,26 @@ class MotorController():
             self.winches.append(winch)
 
     
-    def compute_trajectories(self, goal, current_pose,):
+    def compute_trajectories(self, goal, current_pose, n_steps=50):
         current_rope_lengths = self.compute_rope_lengths(current_pose)
         target_rope_lengths = self.compute_rope_lengths(goal)
-        delta_rope_lengths = self.compute_rope_length_deltas(current_rope_lengths, target_rope_lengths)
-        largest_delta = max(delta_rope_lengths)
+
+        # Compute deltas for each winch
+        delta_rope_lengths = [t - c for c, t in zip(current_rope_lengths, target_rope_lengths)]
+        largest_delta = max(abs(d) for d in delta_rope_lengths)
+
+        # Compute total move time based on largest delta
         move_time = largest_delta / self.winch_profile.nominal_linear_velocity
 
         # Publish new rope lengths
-        for winch, length in zip(self.winches, target_rope_lengths):
-            winch.publish_rope_length(length)
+        for i, winch in enumerate(self.winches):
+            # Linear interpolation of rope lengths
+            trajectory = [
+                current_rope_lengths[i] + delta_rope_lengths[i] * (step / (n_steps - 1))
+                for step in range(n_steps)
+            ]
+            # Publish the trajectory
+            winch.publish_trajectory(trajectory, total_time=move_time)
 
     def compute_rope_lengths(self, pose):
         rope_lengths = []
