@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<robot name="wallbot">
+
+    <material name="cable_grey">
+        <color rgba="0.2 0.2 0.2 1"/>
+    </material>
+
+    <material name="anchor_green">
+        <color rgba="0 0.6 0.6 1"/>
+    </material>
+
+    <material name="wallbot_red">
+        <color rgba="1 0 0 1"/>
+    </material>    
+
+    <link name="central_body">
+        <visual>
+            <geometry>
+                <box size="0.8 0.5 0.6"/>
+            </geometry>
+            <material name="wallbot_red"/>
+        </visual>  
+    </link>
+
+    <!--Top Left Links-->
+
+    <link name="top_left_socket">
+        <visual>
+            <geometry>
+                <sphere radius="0.075"/>
+            </geometry>
+            <material name="wallbot_red"/>
+        </visual>
+    </link>
+
+    <link name="top_left_cable">
+        <visual>
+            <geometry>
+                <cylinder length="4" radius="0.01"/>
+            </geometry>
+            <material name="cable_grey"/>
+            <origin xyz="0 0 -1.9" rpy="0 0.9 0"/>
+        </visual>
+    </link>
+    <link name="top_left_anchor">
+        <visual>
+            <geometry>
+                <cylinder length="0.4" radius="0.1"/>
+            </geometry>
+            <material name="anchor_green"/>
+            <origin rpy="1.57075 0 0" xyz="0 0 0.1"/>
+        </visual>
+    </link>
+
+    <!--Top Left Joints (Fixed -> Revolute -> Prismatic)-->
+
+    <joint name="base_to_top_left_socket" type="fixed">
+        <parent link="central_body"/>
+        <child link="top_left_socket"/>
+        <origin xyz="0.4 0 0.5"/>
+    </joint>
+
+    <joint name="top_left_socket_cable_connector" type="revolute">
+        <axis xyz="0 1 0"/>
+        <limit effort="1000.00" lower="-1.57" upper="1.57" velocity="0.5"/>
+        <parent link="top_left_socket"/>
+        <child link="top_left_cable"/>
+        <origin xyz="0 1 0"/>
+    </joint>
+
+    <joint name="top_left_prismatic_joint" type="prismatic">
+        <axis xyz="1 0 0"/>
+        <limit effort="1000.00" lower="-2.0" upper="2.0" velocity="0.5"/>
+        <parent link="top_left_cable"/>
+        <child link="top_left_anchor"/>
+        <origin xyz="0 0 1"/>
+    </joint>
+
+    <!--Top Right Links-->
+
+    <link name="top_right_socket">
+        <visual>
+            <geometry>
+                <sphere radius="0.075"/>
+            </geometry>
+            <material name="wallbot_red"/>
+        </visual>
+    </link>
+
+    <link name="top_right_cable">
+        <visual>
+            <geometry>
+                <cylinder length="4" radius="0.01"/>
+            </geometry>
+            <material name="cable_grey"/>
+            <origin xyz="0 0 -1.9" rpy="0 -0.9 0"/>
+        </visual>
+    </link>
+    <link name="top_right_anchor">
+        <visual>
+            <geometry>
+                <cylinder length="0.4" radius="0.1"/>
+            </geometry>
+            <material name="anchor_green"/>
+            <origin rpy="1.57075 0 0" xyz="0 0 0.1"/>
+        </visual>
+    </link>
+
+    <!--Top Right Joints (Fixed -> Revolute -> Prismatic)-->
+
+    <joint name="base_to_top_right_socket" type="fixed">
+        <parent link="central_body"/>
+        <child link="top_right_socket"/>
+        <origin xyz="-0.4 0 0.5"/>
+    </joint>
+
+    <joint name="top_right_socket_cable_connector" type="revolute">
+        <axis xyz="0 1 0"/>
+        <limit effort="1000.00" lower="-1.57" upper="1.57" velocity="0.5"/>
+        <parent link="top_right_socket"/>
+        <child link="top_right_cable"/>
+        <origin xyz="0 0 0"/>
+    </joint>
+
+    <joint name="top_right_prismatic_joint" type="prismatic">
+        <axis xyz="1 0 0"/>
+        <limit effort="1000.00" lower="-2.0" upper="2.0" velocity="0.5"/>
+        <parent link="top_right_cable"/>
+        <child link="top_right_anchor"/>
+        <origin xyz="0 0 1"/>
+    </joint>
+
+    <!--Bottom Left Links-->
+
+    <link name="bottom_left_socket">
+        <visual>
+            <geometry>
+                <sphere radius="0.075"/>
+            </geometry>
+            <material name="wallbot_red"/>
+        </visual>
+    </link>
+
+    <link name="bottom_left_cable">
+        <visual>
+            <geometry>
+                <cylinder length="4" radius="0.01"/>
+            </geometry>
+            <material name="cable_grey"/>
+            <origin xyz="0 0 -1.9" rpy="0 0.9 0"/>
+        </visual>
+    </link>
+    <link name="bottom_left_anchor">
+        <visual>
+            <geometry>
+                <cylinder length="0.4" radius="0.1"/>
+            </geometry>
+            <material name="anchor_green"/>
+            <origin rpy="1.57075 0 0" xyz="0 0 0.1"/>
+        </visual>  
+    </link>
+
+    <!--Bottom Left Joints (Fixed -> Revolute -> Prismatic)-->
+
+    <joint name="base_to_bottom_left_socket" type="fixed">
+        <parent link="central_body"/>
+        <child link="bottom_left_socket"/>
+        <origin xyz="0.4 0 -0.5"/>
+    </joint>
+
+    <joint name="bottom_left_socket_cable_connector" type="revolute">
+        <axis xyz="0 1 0"/>
+        <limit effort="1000.00" lower="-1.57" upper="1.57" velocity="0.5"/>
+        <parent link="bottom_left_socket"/>
+        <child link="bottom_left_cable"/>
+        <origin xyz="0 1 0"/>
+    </joint>
+
+    <joint name="bottom_left_prismatic_joint" type="prismatic">
+        <axis xyz="1 0 0"/>
+        <limit effort="1000.00" lower="-2.0" upper="2.0" velocity="0.5"/>
+        <parent link="bottom_left_cable"/>
+        <child link="bottom_left_anchor"/>
+        <origin xyz="0 0 1"/>
+    </joint>
+
+    <!--Bottom Right Links-->
+
+    <link name="bottom_right_socket">
+        <visual>
+            <geometry>
+                <sphere radius="0.075"/>
+            </geometry>
+            <material name="wallbot_red"/>
+        </visual>
+        
+    </link>
+
+    <link name="bottom_right_cable">
+        <visual>
+            <geometry>
+                <cylinder length="4" radius="0.01"/>
+            </geometry>
+            <material name="cable_grey"/>
+            <origin xyz="0 0 -1.9" rpy="0 0.9 0"/>
+        </visual>
+    </link>
+    <link name="bottom_right_anchor">
+        <visual>
+            <geometry>
+                <cylinder length="0.4" radius="0.1"/>
+            </geometry>
+            <material name="anchor_green"/>
+            <origin rpy="1.57075 0 0" xyz="0 0 0.1"/>
+        </visual>
+    </link>
+
+    <!--Bottom Right Joints (Fixed -> Revolute -> Prismatic)-->
+
+    <joint name="base_to_bottom_right_socket" type="fixed">
+        <parent link="central_body"/>
+        <child link="bottom_right_socket"/>
+        <origin xyz="-0.4 0 -0.5"/>
+    </joint>
+
+    <joint name="bottom_right_socket_cable_connector" type="revolute">
+        <axis xyz="0 1 0"/>
+        <limit effort="1000.00" lower="-1.57" upper="1.57" velocity="0.5"/>
+        <parent link="bottom_right_socket"/>
+        <child link="bottom_right_cable"/>
+        <origin xyz="0 1 0"/>
+    </joint>
+
+    <joint name="bottom_right_prismatic_joint" type="prismatic">
+        <axis xyz="1 0 0"/>
+        <limit effort="1000.00" lower="-2.0" upper="2.0" velocity="0.5"/>
+        <parent link="bottom_right_cable"/>
+        <child link="bottom_right_anchor"/>
+        <origin xyz="0 0 1"/>
+    </joint>
+
+</robot>
