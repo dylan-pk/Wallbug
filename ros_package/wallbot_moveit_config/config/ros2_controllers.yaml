@@ -1,0 +1,28 @@
+# This config file is used by ros2_control
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    wallbot_bot_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+wallbot_bot_controller:
+  ros__parameters:
+    joints:
+      - central_to_world
+      - bottom_left_socket_cable_connector
+      - bottom_left_prismatic_joint
+      - bottom_right_socket_cable_connector
+      - bottom_right_prismatic_joint
+      - top_left_socket_cable_connector
+      - top_left_prismatic_joint
+      - top_right_socket_cable_connector
+      - top_right_prismatic_joint
+    command_interfaces:
+      []
+    state_interfaces:
+      []

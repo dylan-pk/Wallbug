@@ -1,0 +1,127 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+    <world name="wallbot_world">
+        <physics name="1ms" type="ode">
+            <max_step_size>0.001</max_step_size>
+            <real_time_factor>1.0</real_time_factor>
+        </physics>
+        <plugin
+            filename="libignition-gazebo-physics-system.so"
+            name="ignition::gazebo::systems::Physics">
+        </plugin>
+        <plugin
+            filename="libignition-gazebo-user-commands-system.so"
+            name="ignition::gazebo::systems::UserCommands">
+        </plugin>
+        <plugin
+            filename="libignition-gazebo-scene-broadcaster-system.so"
+            name="ignition::gazebo::systems::SceneBroadcaster">
+        </plugin>
+        <plugin
+            filename="libignition-gazebo-sensors-system.so"
+            name="ignition::gazebo::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+        </plugin>
+        <plugin 
+            filename="libignition-gazebo-contact-system.so"
+            name="ignition::gazebo::systems::Contact">
+        </plugin>
+
+        <light type="directional" name="sun">
+            <cast_shadows>true</cast_shadows>
+            <pose>0 0 10 0 0 0</pose>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+            <attenuation>
+                <range>1000</range>
+                <constant>0.9</constant>
+                <linear>0.01</linear>
+                <quadratic>0.001</quadratic>
+            </attenuation>
+            <direction>-0.5 0.1 -0.9</direction>
+        </light>
+
+        <model name="ground_plane">
+            <static>true</static>
+            <link name="link">
+                <collision name="collision">
+                <geometry>
+                    <plane>
+                    <normal>0 0 1</normal>
+                    </plane>
+                </geometry>
+                </collision>
+                <visual name="visual">
+                <geometry>
+                    <plane>
+                    <normal>0 0 1</normal>
+                    <size>100 100</size>
+                    </plane>
+                </geometry>
+                <material>
+                    <ambient>0.8 0.8 0.8 1</ambient>
+                    <diffuse>0.8 0.8 0.8 1</diffuse>
+                    <specular>0.8 0.8 0.8 1</specular>
+                </material>
+                </visual>
+            </link>
+        </model>
+
+        <include>
+          <uri>model://Wallbot_V3_Robot</uri>
+          <name>wallbot</name>
+          <pose>0 0 3 0 0 0</pose>
+        </include>
+
+        <include>
+          <uri>model://BL_Anchor</uri>
+          <name>bl_anchor</name>
+          <pose>0 0 3 0 0 0</pose>
+        </include>
+
+        <include>
+          <uri>model://BR_Anchor</uri>
+          <name>br_anchor</name>
+          <pose>0 0 3 0 0 0</pose>
+        </include>
+
+        <include>
+          <uri>model://TL_Anchor</uri>
+          <name>tl_anchor</name>
+          <pose>0 0 3 0 0 0</pose>
+        </include>
+
+        <include>
+          <uri>model://TR_Anchor</uri>
+          <name>tr_anchor</name>
+          <pose>0 0 3 0 0 0</pose>
+        </include>
+
+        <include>
+          <uri>model://anchor_base</uri>
+          <name>world_anchor</name>
+          <pose>0 0 0 0 0 0</pose>
+        </include>
+        
+    <joint name="bl_anchor_world_joint" type="fixed">
+      <parent>world_anchor::world_anchor_link</parent>
+      <child>bl_anchor::bl_link</child>
+    </joint>
+
+    <joint name="br_anchor_world_joint" type="fixed">
+      <parent>world_anchor::world_anchor_link</parent>
+      <child>br_anchor::br_link</child>
+    </joint>
+
+    <joint name="tl_anchor_world_joint" type="fixed">
+      <parent>world_anchor::world_anchor_link</parent>
+      <child>tl_anchor::tl_link</child>
+    </joint>
+
+    <joint name="tr_anchor_world_joint" type="fixed">
+      <parent></parent>
+      <child>tr_anchor::tr_link</child>
+    </joint>
+
+    </world>
+</sdf>

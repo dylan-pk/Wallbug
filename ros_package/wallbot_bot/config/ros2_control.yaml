@@ -1,0 +1,29 @@
+# config/ros2_control.yaml
+controller_manager:
+  update_rate: 100
+
+ros2_control:
+  # The hardware plugin - gazebo_ros2_control provides the GazeboSystemInterface
+  hardware:
+    plugin: "gazebo_ros2_control/GazeboSystemInterface"
+
+  # No joints listed here: the system discovers them from URDF transmissions
+
+controllers:
+  joint_state_broadcaster:
+    type: joint_state_broadcaster/JointStateBroadcaster
+    # publishes /joint_states
+
+  prismatic_position_controller:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - Prismatic_Joint_Bottom_Left
+      - Prismatic_Joint_Bottom_Right
+      - Prismatic_Joint_Top_Left
+      - Prismatic_Joint_Top_Right
+    # Example gains/setup (tune later)
+    action_monitor_rate: 20
+    allow_partial_joints_goal: true
+    constraints:
+      goal_time: 0.6
+      stopped_velocity_tolerance: 0.02

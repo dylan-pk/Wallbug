@@ -1,0 +1,519 @@
+<?xml version="1.0"?>
+<robot name="Wallbot_V3_Robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- ======================
+       Links (17)
+       ====================== -->
+  <!-- link_0 through link_16: inertial values are placeholders — tune to match your SDF exact masses/inertias -->
+  <link name="link_0">
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_0.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_0_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_1">
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.005" ixy="0.0" ixz="0.0" iyy="0.005" iyz="0.0" izz="0.005"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_1.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_1_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_2">
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.005" ixy="0.0" ixz="0.0" iyy="0.005" iyz="0.0" izz="0.005"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_2.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_2_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_3">
+    <inertial>
+      <mass value="0.75"/>
+      <inertia ixx="0.007" ixy="0.0" ixz="0.0" iyy="0.007" iyz="0.0" izz="0.007"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_3.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_3_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_4">
+    <inertial>
+      <mass value="0.25"/>
+      <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.002" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_4.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_4_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_5">
+    <inertial>
+      <mass value="0.25"/>
+      <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.002" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_5.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_5_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_6">
+    <inertial>
+      <mass value="0.25"/>
+      <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.002" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_6.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_6_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_7">
+    <inertial>
+      <mass value="0.6"/>
+      <inertia ixx="0.006" ixy="0.0" ixz="0.0" iyy="0.006" iyz="0.0" izz="0.006"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_7.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_7_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_8">
+    <inertial>
+      <mass value="0.2"/>
+      <inertia ixx="0.0015" ixy="0.0" ixz="0.0" iyy="0.0015" iyz="0.0" izz="0.0015"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_8.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_8_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_9">
+    <inertial>
+      <mass value="0.2"/>
+      <inertia ixx="0.0015" ixy="0.0" ixz="0.0" iyy="0.0015" iyz="0.0" izz="0.0015"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_9.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_9_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_10">
+    <inertial>
+      <mass value="0.2"/>
+      <inertia ixx="0.0015" ixy="0.0" ixz="0.0" iyy="0.0015" iyz="0.0" izz="0.0015"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_10.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_10_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_11">
+    <inertial>
+      <mass value="0.4"/>
+      <inertia ixx="0.004" ixy="0.0" ixz="0.0" iyy="0.004" iyz="0.0" izz="0.004"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_11.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_11_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_12">
+    <inertial>
+      <mass value="0.3"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_12.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_12_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_13">
+    <inertial>
+      <mass value="0.4"/>
+      <inertia ixx="0.004" ixy="0.0" ixz="0.0" iyy="0.004" iyz="0.0" izz="0.004"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_13.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_13_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_14">
+    <inertial>
+      <mass value="0.15"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_14.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_14_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_15">
+    <inertial>
+      <mass value="0.15"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_15.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_15_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link_16">
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.0005" ixy="0.0" ixz="0.0" iyy="0.0005" iyz="0.0" izz="0.0005"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_16.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="model://Wallbot_V2_Robot/meshes/link_16_collision.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- ======================
+       Joints (16) — example structure
+       (many joints are kept as fixed/revolute depending on SDF; prismatic ones explicitly declared)
+       ====================== -->
+
+  <!-- Fixed joint example -->
+  <joint name="joint_0_fixed" type="fixed">
+    <parent link="link_0"/>
+    <child link="link_1"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Revolute example -->
+  <joint name="joint_1_revolute" type="revolute">
+    <parent link="link_1"/>
+    <child link="link_2"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="50" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+  <!-- Revolute / continuous example -->
+  <joint name="joint_2_revolute" type="revolute">
+    <parent link="link_2"/>
+    <child link="link_3"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="30" velocity="1.0" lower="-3.14" upper="3.14"/>
+  </joint>
+
+  <!-- One of the prismatic joints (Bottom Left) -->
+  <joint name="Prismatic_Joint_Bottom_Left" type="prismatic">
+    <parent link="link_3"/>
+    <child link="link_4"/>
+    <!-- origin set to match SDF local placement — adjust if needed -->
+    <origin xyz="0.12 0.05 0.0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.1" upper="0.1" effort="100.0" velocity="0.5"/>
+  </joint>
+
+  <!-- Another joint (e.g., fixed) -->
+  <joint name="joint_4_fixed" type="fixed">
+    <parent link="link_3"/>
+    <child link="link_5"/>
+    <origin xyz="0 0 -0.02" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Prismatic joint (Bottom Right) -->
+  <joint name="Prismatic_Joint_Bottom_Right" type="prismatic">
+    <parent link="link_5"/>
+    <child link="link_6"/>
+    <origin xyz="-0.12 0.05 0.0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.1" upper="0.1" effort="100.0" velocity="0.5"/>
+  </joint>
+
+  <!-- intermediate joint -->
+  <joint name="joint_6_revolute" type="revolute">
+    <parent link="link_6"/>
+    <child link="link_7"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="30" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+  <!-- Prismatic joint (Top Left) -->
+  <joint name="Prismatic_Joint_Top_Left" type="prismatic">
+    <parent link="link_7"/>
+    <child link="link_8"/>
+    <origin xyz="0.08 -0.05 0.0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.1" upper="0.1" effort="100.0" velocity="0.5"/>
+  </joint>
+
+  <!-- other structural joints -->
+  <joint name="joint_8_revolute" type="revolute">
+    <parent link="link_8"/>
+    <child link="link_9"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="20" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+  <!-- Prismatic joint (Top Right) -->
+  <joint name="Prismatic_Joint_Top_Right" type="prismatic">
+    <parent link="link_9"/>
+    <child link="link_10"/>
+    <origin xyz="-0.08 -0.05 0.0" rpy="0 0 0"/>
+    <axis xyz="0 0 -1"/>
+    <limit lower="-0.1" upper="0.1" effort="100.0" velocity="0.5"/>
+  </joint>
+
+  <!-- Remaining structural joints -->
+  <joint name="joint_10_revolute" type="revolute">
+    <parent link="link_10"/>
+    <child link="link_11"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="25" velocity="2.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+  <joint name="joint_11_fixed" type="fixed">
+    <parent link="link_11"/>
+    <child link="link_12"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="joint_12_revolute" type="revolute">
+    <parent link="link_12"/>
+    <child link="link_13"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="15" velocity="1.0" lower="-3.14" upper="3.14"/>
+  </joint>
+
+  <joint name="joint_13_fixed" type="fixed">
+    <parent link="link_13"/>
+    <child link="link_14"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="joint_14_revolute" type="revolute">
+    <parent link="link_14"/>
+    <child link="link_15"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="10" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+  <joint name="joint_15_fixed" type="fixed">
+    <parent link="link_15"/>
+    <child link="link_16"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ======================
+       Transmissions for prismatic joints (required for ros2_control)
+       ====================== -->
+  <transmission name="trans_Prismatic_Joint_Bottom_Left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="Prismatic_Joint_Bottom_Left">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <transmission name="trans_Prismatic_Joint_Bottom_Right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="Prismatic_Joint_Bottom_Right">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <transmission name="trans_Prismatic_Joint_Top_Left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="Prismatic_Joint_Top_Left">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <transmission name="trans_Prismatic_Joint_Top_Right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="Prismatic_Joint_Top_Right">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <!-- ======================
+       ros2_control tag — indicates to ros2_control that this URDF is controllable
+       ====================== -->
+  <ros2_control name="Wallbot_ros2_control" type="system">
+    <hardware>
+      <!-- GazeboSystemInterface will be used by gazebo_ros2_control plugin at runtime -->
+      <plugin>gazebo_ros2_control/GazeboSystemInterface</plugin>
+    </hardware>
+  </ros2_control>
+
+  <!-- ======================
+       Gazebo plugin block to ensure Gazebo Classic loads the ros2_control plugin
+       (this keeps compatibility with Gazebo Classic while exposing ros2_control interfaces)
+       ====================== -->
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <robotNamespace>/</robotNamespace>
+      <!-- If you need to pass ros2_control config file path, you can do it through plugin params
+           or via controller_manager node arguments when launching -->
+    </plugin>
+  </gazebo>
+
+</robot>

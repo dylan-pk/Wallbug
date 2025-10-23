@@ -1,0 +1,20 @@
+# MoveIt uses this configuration for controller management
+
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - wallbot_bot_controller
+
+  wallbot_bot_controller:
+    type: FollowJointTrajectory
+    joints:
+      - central_to_world
+      - bottom_left_socket_cable_connector
+      - bottom_left_prismatic_joint
+      - bottom_right_socket_cable_connector
+      - bottom_right_prismatic_joint
+      - top_left_socket_cable_connector
+      - top_left_prismatic_joint
+      - top_right_socket_cable_connector
+      - top_right_prismatic_joint

@@ -1,0 +1,34 @@
+<?xml version='1.0'?>
+<sdf version='1.7'>
+  <model name="anchor_base">
+    <static>true</static>
+    <link name="world_anchor_link">
+      <pose>0 0 0 0 0 0</pose>
+    </link>
+  
+    <plugin filename="libignition-gazebo-detachable-joint-system.so" name="ignition::gazebo::systems::DetachableJoint">
+       <parent_link>world_anchor_link</parent_link>
+       <child_model>tr_anchor</child_model>
+       <child_link>tr_link</child_link>
+       <topic>/B1/detach</topic>
+    </plugin>
+    <plugin filename="libignition-gazebo-detachable-joint-system.so" name="ignition::gazebo::systems::DetachableJoint">
+       <parent_link>world_anchor_link</parent_link>
+       <child_model>tl_anchor</child_model>
+       <child_link>tl_link</child_link>
+       <topic>/B2/detach</topic>
+      </plugin>
+    <plugin filename="libignition-gazebo-detachable-joint-system.so" name="ignition::gazebo::systems::DetachableJoint">
+       <parent_link>world_anchor_link</parent_link>
+       <child_model>br_anchor</child_model>
+       <child_link>br_link</child_link>
+       <topic>/B3/detach</topic>
+    </plugin>
+    <plugin filename="libignition-gazebo-detachable-joint-system.so" name="ignition::gazebo::systems::DetachableJoint">
+       <parent_link>world_anchor_link</parent_link>
+       <child_model>bl_anchor</child_model>
+       <child_link>bl_link</child_link>
+       <topic>/B3/detach</topic>
+    </plugin>
+  </model>
+</sdf>

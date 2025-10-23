@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>wallbot_bot</name>
+  <version>0.1.0</version>
+  <description>URDF description package for Wallbot V3</description>
+
+  <maintainer email="cajwilliams13@example.com">Connor Williams</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_python</buildtool_depend>
+  <depend>rclpy</depend>
+  <depend>gazebo_ros</depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

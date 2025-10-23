@@ -1,0 +1,4 @@
+# Default initial positions for wallbot's ros2_control fake system
+
+initial_positions:
+  central_motion: 0

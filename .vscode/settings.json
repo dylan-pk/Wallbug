@@ -1,0 +1,10 @@
+{
+    "python.analysis.extraPaths": [
+        "/home/cajwill/ros2_ws/install/moveit_task_constructor_core/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages"
+    ],
+    "python.autoComplete.extraPaths": [
+        "/home/cajwill/ros2_ws/install/moveit_task_constructor_core/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages"
+    ]    
+}

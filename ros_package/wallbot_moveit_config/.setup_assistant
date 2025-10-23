@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: wallbot_urdf
+    relative_path: urdf/wallbot.urdf
+  srdf:
+    relative_path: config/wallbot.srdf
+  package_settings:
+    author_name: Connor Williams
+    author_email: cajwilliams13@gmail.com
+    generated_timestamp: 1761193011
