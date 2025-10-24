@@ -1,0 +1,37 @@
+ros2_control_node:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - tl_anchor_rev_joint
+      - top_left_prismatic_joint
+      - top_left_socket_cable_connector
+      - base_to_top_left_socket
+      - top_right_prismatic_joint
+      - top_right_socket_cable_connector
+      - base_to_top_right_socket
+      - bottom_left_prismatic_joint
+      - bottom_left_socket_cable_connector
+      - base_to_bottom_left_socket
+      - bottom_right_prismatic_joint
+      - bottom_right_socket_cable_connector
+      - base_to_bottom_right_socket
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+      - velocity
+
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+    interpolate_from_desired_state: true
