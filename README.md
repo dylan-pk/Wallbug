@@ -68,6 +68,14 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 - **Documentation (D.4)**: Full technical + handover docs  
 - **CAD (D.5) & Code Files (D.6)**: Provided at handover  
 
+- **UI (D.1b)**: Framework for the UI displaying on-board mock-up of sensors  
+- **Functioning Demo (D.2b)**: A simulation demonstrating the Wallbot’s movement along a pre-planned path and a code framework for wireless communication  
+- **Mechanical Shell (D.3b)**: Upgraded mechanical shell to facilitate nicer wire management and durability *  
+- **Documentation (D.4)**: Full technical + handover docs  
+- **CAD (D.5) & Code Files (D.6)**: Provided at handover
+
+* **meaning** **i.** Printed scaled, non-functioning model
+               **ii.** Printed to scale non-funcitoning exterior shell model, & funcitonal internal housing plates
 ---
 
 ![Work Breakdown](https://img.shields.io/badge/Work_Breakdown_Structure-%233A5A40?style=for-the-badge&logoColor=white)
