@@ -146,7 +146,7 @@ All supporting materials, including CAD files, technical documentation, and meet
 
 ![Handover](https://img.shields.io/badge/Handover_Completion-%233A5A40?style=for-the-badge&logoColor=white)
 
-The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 Novemeber 2025**.  
+The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 Novemeber 2025** by **The Wallbug Team**.  
 This delivery marks the completion of work as specified in:  
 - *Project Scope and Specifications – Rev E (Signed)*  
 - *Project Handover Plan – Rev B*  
