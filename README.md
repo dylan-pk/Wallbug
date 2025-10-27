@@ -1,102 +1,95 @@
 # 🌱 Wallbot System Development  
 
 ---
-*Wallbug Landing Page*   
-https://dylan-pk.github.io/Wallbug/
 
 ![Overview](https://img.shields.io/badge/Overview-%23184E77?style=for-the-badge&logoColor=white)
 
-The **Wallbot System Development** project aims to further develop and improve the current Wallbot into a fully functional **demonstration platform**.  
-The **Wallbug Team** is responsible for the design and implementation of Wallbot.  
+The **Wallbot System Development** project represents the finalised redevelopment and delivery of the *Wallbot* platform by the **Wallbug Team** under the DMMS subject at the University of Technology Sydney.  
+The system is designed to traverse vertical surfaces and function as a **plant‑surveying robot**, equipped with sensors to monitor plant health and density.  
 
-The system is designed to traverse vertical surfaces and demonstrate its role as a **plant surveying robot**, equipped with on-board sensors to monitor plant health and density.  
-
-The end goal is to deliver an **investor-ready demo unit** that showcases technical capabilities, safety, and public appeal, while also serving as a stepping stone for **smart city green wall technologies**.  
+This project delivers an **investor‑ready demonstration platform**, fulfilling requirements outlined in the *Project Scope and Specifications (Rev E)* and the *Project Handover Plan (Rev B)*.  
+It demonstrates the integration of mechanical, electrical, and software subsystems, supported by a refined user interface and visual branding package.  
 
 ---
 
 ![Objectives](https://img.shields.io/badge/Objectives-%233A5A40?style=for-the-badge&logoColor=white)
 
-- Refurbish and integrate Wallbot components into a reliable demonstration unit.  
-- Enable **vertical traversal** with wireless control and safe actuation.  
-- Collect and display **plant health data** through onboard camera systems.  
-- Improve **aesthetics, safety, and UI** for engaging demonstrations.  
-- Supply **handover packages** (CAD, code, documentation) for scalability.  
+- Develop a safe, reliable, and visually engaging **Wallbot demonstration platform**.  
+- Enable **vertical traversal** and plant health data collection via onboard sensors.  
+- Ensure **stable communication** between winches, motors, and control UI.  
+- Integrate subsystems into a cohesive, modular architecture for ease of testing and reuse.  
+- Deliver **complete handover documentation**, CAD, and functional demonstration video package.  
 
 ---
 
 ![Scope](https://img.shields.io/badge/Scope-%23669EBC?style=for-the-badge&logoColor=white)
 
-**In-Scope**  
-- Wallbot movement and motor control  
-- Wireless communication and control  
-- Sensor integration and visual output  
-- Mechanical shell redesign  
+**In‑Scope**  
+- Wallbot vertical mobility and platform control  
+- Motor coordination through CANBus and central controller  
+- Sensor integration for plant health detection  
+- Wireless control via UI panel  
+- Redeveloped shell with improved cable and safety design  
 
-**Out-of-Scope**  
-- Weather proofing for winch system  
-- Z-axis climbing  
-- Wind resistance at high altitude  
-- Complex manipulation (e.g., pruning)  
-- Renewable charging integration  
+**Out‑of‑Scope**  
+- Full autonomous navigation beyond predefined path  
+- Extended weatherproofing or outdoor deployment  
+- Long‑term power autonomy or recharging integration  
+- Multi‑unit synchronisation beyond single‑system demo  
 
 ---
 
 ![Requirements](https://img.shields.io/badge/Requirements-%23A3B18A?style=for-the-badge&logoColor=black)
 
 **Minimum Viable Product (MVP)**  
-- Cable management system  
-- Pre-planned movement demonstration  
-- Modular, reusable subsystems  
-- Camera data displayed on external monitor  
-- Wireless communication  
-- Plant health detection (3 colour stages)  
+- Safe cable management system and winch coordination  
+- Pre‑programmed demonstration path for reliable motion  
+- Wireless communication between UI and motor controllers  
+- Visual indicator of plant health via colour segmentation (3 stages)  
+- Full documentation and build reproducibility  
 
 **Stretch Goals**  
-- LED-based visual feedback  
-- Autonomous docking/recharging  
-- Autonomous movement  
-- Single-press full demo sequence  
+- Enhanced LED feedback and display integration  
+- Automated start/stop demo sequence  
+- Expanded telemetry data visualisation in UI  
 
 ---
 
 ![Deliverables](https://img.shields.io/badge/Deliverables-%23184E77?style=for-the-badge&logoColor=white)
 
-- **UI (D.1)**: Displays onboard sensors  
-- **Functioning Demo (D.2)**: Pre-planned movement + wireless comms  
-- **Mechanical Shell (D.3)**: Improved cable management + durability  
-- **Documentation (D.4)**: Full technical + handover docs  
-- **CAD (D.5) & Code Files (D.6)**: Provided at handover  
+**As defined in Project Handover Plan (Rev B)**  
 
-- **UI (D.1b)**: Framework for the UI displaying on-board mock-up of sensors  
-- **Functioning Demo (D.2b)**: A simulation demonstrating the Wallbot’s movement along a pre-planned path and a code framework for wireless communication  
-- **Mechanical Shell (D.3b)**: Upgraded mechanical shell to facilitate nicer wire management and durability *  
-- **Documentation (D.4)**: Full technical + handover docs  
-- **CAD (D.5) & Code Files (D.6)**: Provided at handover
+| Deliverable ID | Description | Status |
+|----------------|--------------|---------|
+| **D.1b** | Updated System UI and Display Integration | ✅ Completed |
+| **D.2b** | Functional Demonstration – Pre‑Programmed Traversal | ✅ Completed |
+| **D.3b** | Redeveloped Mechanical Shell and Safety Housing | ✅ Completed |
+| **D.4b** | Full Technical Documentation and Assembly Pack | ✅ Completed |
+| **D.5b** | Complete CAD and Code Package in Repository | ✅ Completed |
+| **D.6b** | Final Digital Handover and Video Demonstration | ✅ Completed |
 
-* **meaning** **i.** Printed scaled, non-functioning model
-               **ii.** Printed to scale non-funcitoning exterior shell model, & funcitonal internal housing plates
 ---
 
 ![Work Breakdown](https://img.shields.io/badge/Work_Breakdown_Structure-%233A5A40?style=for-the-badge&logoColor=white)
 
-- **Mechanical**: Shell redevelopment, winches, housing, safety systems  
-- **Electrical**: Motor communication (CANBus), wiring, load cells, control panel  
-- **Mechatronics**: Motor control (speed/motion), path planning, stability  
-- **UI**: Wireless control, real-time sensor display  
+- **Mechanical** – Shell redevelopment, winches, and safety systems  
+- **Electrical** – Motor communication (CANBus), wiring, and load cell integration  
+- **Mechatronics** – Motion control, path planning, and subsystem integration  
+- **UI** – Wireless control interface and live sensor display  
 
 ---
 
 ![Visual Identity](https://img.shields.io/badge/Visual_Identity-%23669EBC?style=for-the-badge&logoColor=white)
 
-**Wallbug colour palette**  
+**Wallbug Colour Palette**  
+
 | Colour Name   | Hex Code   | Swatch |
 |---------------|------------|--------|
-| Dark Green    | `#3A5A40`  | ![Dark Green](https://img.shields.io/badge/----?style=flat-square&labelColor=3A5A40&color=3A5A40&logoColor=3A5A40) |
-| Sage Green    | `#A3B18A`  | ![Sage Green](https://img.shields.io/badge/----?style=flat-square&labelColor=A3B18A&color=A3B18A&logoColor=A3B18A) |
-| Light Neutral | `#EAE8E2`  | ![Light Neutral](https://img.shields.io/badge/----?style=flat-square&labelColor=EAE8E2&color=EAE8E2&logoColor=EAE8E2) |
-| Blue          | `#669EBC`  | ![Blue](https://img.shields.io/badge/----?style=flat-square&labelColor=669EBC&color=669EBC&logoColor=669EBC) |
-| Deep Blue     | `#184E77`  | ![Deep Blue](https://img.shields.io/badge/----?style=flat-square&labelColor=184E77&color=184E77&logoColor=184E77) |
+| Dark Green    | `#3A5A40`  | ![Dark Green](https://img.shields.io/badge/-----------?style=flat-square&labelColor=3A5A40&color=3A5A40&logoColor=3A5A40) |
+| Sage Green    | `#A3B18A`  | ![Sage Green](https://img.shields.io/badge/-----------?style=flat-square&labelColor=A3B18A&color=A3B18A&logoColor=A3B18A) |
+| Light Neutral | `#EAE8E2`  | ![Light Neutral](https://img.shields.io/badge/-----------?style=flat-square&labelColor=EAE8E2&color=EAE8E2&logoColor=EAE8E2) |
+| Blue          | `#669EBC`  | ![Blue](https://img.shields.io/badge/-----------?style=flat-square&labelColor=669EBC&color=669EBC&logoColor=669EBC) |
+| Deep Blue     | `#184E77`  | ![Deep Blue](https://img.shields.io/badge/-----------?style=flat-square&labelColor=184E77&color=184E77&logoColor=184E77) |
 
 ---
 
@@ -126,43 +119,51 @@ The end goal is to deliver an **investor-ready demo unit** that showcases techni
 
 | Name               | Role                    | Responsibilities                                                |
 |--------------------|-------------------------|----------------------------------------------------------------|
-| **Anika Roth**     | Electrical Lead         | Electrical design, embedded systems, wiring                     |
-| **Anton Cecire**   | Interface Lead          | UI design, interface integration                                |
-| **Benjamin Cooper**| Movement Lead           | Wallbot movement, subsystem integration                         |
-| **Connor Williams**| Industrial Comms Lead   | Motor communication (CANBus), firmware/software comms           |
-| **Dylan Purbrick** | Team Lead               | Organisation, documentation, client liaison                     |
-| **Fadi Alameddine**| Mechanical Design Lead  | Mechanical design, CAD, prototyping                             |
+| **Anika Roth**     | Electrical Lead         | Electrical design, embedded systems, wiring                     |
+| **Anton Cecire**   | Interface Lead          | UI design, interface integration                                |
+| **Benjamin Cooper**| Movement Lead           | Wallbot movement, subsystem integration                         |
+| **Connor Williams**| Industrial Comms Lead   | Motor communication (CANBus), firmware/software comms           |
+| **Dylan Purbrick** | Team Lead               | Organisation, documentation, client liaison                     |
+| **Fadi Alameddine**| Mechanical Design Lead  | Mechanical design, CAD, prototyping                             |
 
-### Extended Contributors  
+### Extended Contributors  
+- **Dana** – Winches & Mechanical Actuation  
+- **Adithya** – External Student, Wallbot Project Management Support  
 
-- **Dana** – Winches & Mechanical Actuation  
-- **Adithya** – External Student, Wallbot Project Management Support  
-
-### Client  
-
-- **Marc Carmichael** – Client (UTS Robotics Institute, Head Tutor DMMS)  
-
-### Project Coach  
-
-- **Roy Wang** – Project Coach  
+### Client and Coach  
+- **Marc Carmichael** – Client (UTS Robotics Institute, Head Tutor DMMS)  
+- **Roy Wang** – Project Coach  
 
 ---
 
 ![Documentation](https://img.shields.io/badge/Documentation-%23669EBC?style=for-the-badge&logoColor=white)
 
-All supporting materials, including CAD files, technical documentation, and meeting records, will be organised within the DMMS MS Teams dedicated Wallbot System Development Channel.  
-Critical files such as ROS packages and further code elements will be stored within their respective folders.  
+All supporting materials, including CAD files, technical documentation, and meeting records, are stored within:  
+- The **DMMS MS Teams → Wallbot System Development Channel**, and  
+- The **GitHub repository** under `/docs` and `/assets` for final code, CAD, and documentation deliverables.  
+
+---
+
+![Handover](https://img.shields.io/badge/Handover_Completion-%233A5A40?style=for-the-badge&logoColor=white)
+
+The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 October 2025**.  
+This delivery marks the completion of work as specified in:  
+- *Project Scope and Specifications – Rev E (Signed)*  
+- *Project Handover Plan – Rev B*  
+
+All deliverables (D.1b – D.6b) were demonstrated, verified, and accepted by the client in accordance with the final handover criteria.  
+
+---
+
+![Version](https://img.shields.io/badge/Version_History-%23669EBC?style=for-the-badge&logoColor=white)
+
+| Document | Version | Date | Description |
+|-----------|----------|------|--------------|
+| Project Scope & Specifications | Rev E | 13 Oct 2025 | Final signed version by Client |
+| Project Handover Plan | Rev B | 13 Oct 2025 | Accepted handover deliverables & completion record |
 
 ---
 
 ![License](https://img.shields.io/badge/License-%233A5A40?style=for-the-badge&logoColor=white)
 
-This project is currently unlicensed. All rights reserved to the Wallbug team and collaborators.  
-
-
-
-colcon build --packages-select wallbot
-
-source install/setup.bash
-
-ros2 run wallbot demo
+This project is currently unlicensed. All rights reserved to the Wallbug Team and collaborators.  
