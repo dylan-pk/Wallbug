@@ -1,9 +1,6 @@
 # 🌱 Wallbot System Development  
 
 ---
-*Wallbug Landing Page*   
-https://dylan-pk.github.io/Wallbug/
-
 ![Overview](https://img.shields.io/badge/Overview-%23184E77?style=for-the-badge&logoColor=white)
 
 The **Wallbot System Development** project aims to further develop and improve the current Wallbot into a fully functional **demonstration platform**.  
