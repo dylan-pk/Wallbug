@@ -10,7 +10,13 @@
   --md-primary-fg-color: var(--wb-green);
   --md-accent-fg-color:  var(--wb-blue);
 }
-
+/* ──────────────────────────────────────────────
+   HEADER CUSTOMIZATION
+   Remove clickable site title in MkDocs Material
+   ────────────────────────────────────────────── */
+.md-header__title {
+  display: none;
+}
 /* Typography */
 :root, body {
   font-feature-settings: "liga" 1, "kern" 1;
