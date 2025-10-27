@@ -61,12 +61,12 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 | Deliverable ID | Description | Status |
 |----------------|--------------|---------|
-| **D.1b** | Updated System UI and Display Integration | ✅ Completed |
-| **D.2b** | Functional Demonstration – Pre‑Programmed Traversal | ✅ Completed |
-| **D.3b** | Redeveloped Mechanical Shell and Safety Housing | ✅ Completed |
-| **D.4b** | Full Technical Documentation and Assembly Pack | ✅ Completed |
-| **D.5b** | Complete CAD and Code Package in Repository | ✅ Completed |
-| **D.6b** | Final Digital Handover and Video Demonstration | ✅ Completed |
+| **D.1b** | Framework for the UI displaying on-board mock-up of sensors | ~~✅ Completed~~ |
+| **D.2b** | A simulation demonstrating the Wallbot’s movement along a pre-planned path and a code framework for wireless communication | ~~✅ Completed~~ |
+| **D.3b** | Upgraded mechanical shell to facilitate nicer wire management and durability | ~~✅ Completed~~ |
+| **D.4** | Supplying all documentation files to Client (Marc) in the handover | ~~✅ Completed~~ |
+| **D.5** | Supplying all CAD files to Client (Marc) in the handover | ~~✅ Completed~~ |
+| **D.6** | Supplying all code files to Client (Marc) in the handover | ~~✅ Completed~~ |
 
 ---
 
@@ -146,12 +146,12 @@ All supporting materials, including CAD files, technical documentation, and meet
 
 ![Handover](https://img.shields.io/badge/Handover_Completion-%233A5A40?style=for-the-badge&logoColor=white)
 
-The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 October 2025**.  
+The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 Novemeber 2025**.  
 This delivery marks the completion of work as specified in:  
 - *Project Scope and Specifications – Rev E (Signed)*  
 - *Project Handover Plan – Rev B*  
 
-All deliverables (D.1b – D.6b) were demonstrated, verified, and accepted by the client in accordance with the final handover criteria.  
+~~All deliverables (D.1b - D.3b & D.4 – D.6) were demonstrated, verified, and accepted by the client in accordance with the final handover criteria.~~  
 
 ---
 
@@ -159,8 +159,8 @@ All deliverables (D.1b – D.6b) were demonstrated, verified, and accept
 
 | Document | Version | Date | Description |
 |-----------|----------|------|--------------|
-| Project Scope & Specifications | Rev E | 13 Oct 2025 | Final signed version by Client |
-| Project Handover Plan | Rev B | 13 Oct 2025 | Accepted handover deliverables & completion record |
+| Project Scope & Specifications | Rev E | 11 Oct 2025 | Final signed version by Client |
+| Project Handover Plan | Rev B | 24 Oct 2025 | Accepted handover deliverables & completion record |
 
 ---
 
