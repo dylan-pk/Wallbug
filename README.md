@@ -25,24 +25,26 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 ![Scope](https://img.shields.io/badge/Scope-%23669EBC?style=for-the-badge&logoColor=white)
 
 **In‑Scope**  
-- Wallbot vertical mobility and platform control  
-- Motor coordination through CANBus and central controller  
-- Sensor integration for plant health detection  
-- Wireless control via UI panel  
-- Redeveloped shell with improved cable and safety design  
+- Robot movement  
+- Motor control  
+- Visual output  
+- Wireless control and communication  
+- Redeveloped shell with improved cable design  
 
 **Out‑of‑Scope**  
-- Full autonomous navigation beyond predefined path  
-- Extended weatherproofing or outdoor deployment  
-- Long‑term power autonomy or recharging integration  
-- Multi‑unit synchronisation beyond single‑system demo  
+- Weather proofing for winch  
+- Z-axis movement  
+- Accounting for wind speed at altitude  
+- Complex manipulation (plant pruning etc.)  
+- Renewable integration for charging
+- Redesign component  
 
 ---
 
 ![Requirements](https://img.shields.io/badge/Requirements-%23A3B18A?style=for-the-badge&logoColor=black)
 
 **Minimum Viable Product (MVP)**  
-- Safe cable management system and winch coordination  
+- Structured and secure cable management system withput interfering with current sensors   
 - Pre‑programmed demonstration path for reliable motion  
 - Wireless communication between UI and motor controllers  
 - Visual indicator of plant health via colour segmentation (3 stages)  
@@ -50,8 +52,9 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 **Stretch Goals**  
 - Enhanced LED feedback and display integration  
-- Automated start/stop demo sequence  
-- Expanded telemetry data visualisation in UI  
+- Wireless recharging station  
+- Autonamous navigation and movement   
+- Single press complete demo of all elemnts of the Wallbot System  
 
 ---
 
