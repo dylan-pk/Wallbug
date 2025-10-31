@@ -4,10 +4,10 @@
 
 ![Overview](https://img.shields.io/badge/Overview-%23184E77?style=for-the-badge&logoColor=white)
 
-The **Wallbot System Development** project represents the finalised redevelopment and delivery of the *Wallbot* platform by the **Wallbug Team** under the DMMS subject at the University of Technology Sydney.  
+The **Wallbot System Development** project represents the finalised redevelopment and delivery of the _Wallbot_ platform by the **Wallbug Team** under the DMMS subject at the University of Technology Sydney.  
 The system is designed to traverse vertical surfaces and function as a **plant‑surveying robot**, equipped with sensors to monitor plant health and density.  
 
-This project delivers an **investor‑ready demonstration platform**, fulfilling requirements outlined in the *Project Scope and Specifications (Rev E)* and the *Project Handover Plan (Rev B)*.  
+This project delivers an **investor‑ready demonstration platform**, fulfilling requirements outlined in the _Project Scope and Specifications (Rev E)_ and the _Project Handover Plan (Rev B)_.  
 It demonstrates the integration of mechanical, electrical, and software subsystems, supported by a refined user interface and visual branding package.  
 
 ---
@@ -63,25 +63,61 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 **As defined in Project Handover Plan (Rev B)**  
 
 | Deliverable ID | Description | Status |
-|----------------|--------------|---------|
-| **D.1b** | Framework for the UI displaying on-board mock-up of sensors | ~~✅ Completed~~ |
-| **D.2b** | A simulation demonstrating the Wallbot’s movement along a pre-planned path and a code framework for wireless communication | ~~✅ Completed~~ |
-| **D.3b** | Upgraded mechanical shell to facilitate nicer wire management and durability | ~~✅ Completed~~ |
-| **D.4** | Supplying all documentation files to Client (Marc) in the handover | ~~✅ Completed~~ |
-| **D.5** | Supplying all CAD files to Client (Marc) in the handover | ~~✅ Completed~~ |
-| **D.6** | Supplying all code files to Client (Marc) in the handover | ~~✅ Completed~~ |
+|:--------------:|--------------|:-------:|
+| **D.1b** | Framework for the UI displaying on-board mock-up of sensors | ☐ |
+| **D.2b** | A simulation demonstrating the Wallbot’s movement along a pre-planned path and a code framework for wireless communication | ☐ |
+| **D.3b** | Upgraded mechanical shell to facilitate nicer wire management and durability | ☐ |
+| **D.4** | Supplying all documentation files to Client (Marc) in the handover | ☐ |
+| **D.5** | Supplying all CAD files to Client (Marc) in the handover | ☐ |
+| **D.6** | Supplying all code files to Client (Marc) in the handover | ☐ |
 
+  _✅Completed will populate the "Status" column upon handover_  
+  
 ---
 
 ![Work Breakdown](https://img.shields.io/badge/Work_Breakdown_Structure-%233A5A40?style=for-the-badge&logoColor=white)
 
-<p align="center">
-  <img src="https://docs.google.com/drawings/d/e/2PACX-1vQRKzZUNqPZjXplz8AnqKoSKiiIOJTEvibl5ZlPDjqprP8tEGBfvGFfV0hOhyBmGjDRLVORC9NoSYw-/pub?w=2059&amp;h=689" width="850" alt="Work Breakdown Structure Diagram">
-  <br>
-  <em>Figure 1. High-Level Work Breakdown Structure for Wallbot System Development – Wallbug Iteration</em>
-</p>
+![Work Breakdown Structure](https://docs.google.com/drawings/d/e/2PACX-1vQRKzZUNqPZjXplz8AnqKoSKiiIOJTEvibl5ZlPDjqprP8tEGBfvGFfV0hOhyBmGjDRLVORC9NoSYw-/pub?w=3089&h=1033)
 
-> 📎 [View WBS (Google Drawings)](https://docs.google.com/drawings/d/1HzqvC_d6uhQx4mHRx4d34mvmRflEmt4HzOK0eZC4jhY/edit?usp=sharing)
+
+> _Figure 1. High-Level Work Breakdown Structure for Wallbot System Development – Wallbug Iteration_  
+> 📎 [View editable WBS (Google Drawings)](https://docs.google.com/drawings/d/1HzqvC_d6uhQx4mHRx4d34mvmRflEmt4HzOK0eZC4jhY/edit?usp=sharing)
+
+
+### 🧩 WBS Description (Extract from Project Scope and Specifications Rev E)
+ 
+- **Mechanical**
+  - **Shell Redevelopment – Fadi Alameddine**  
+    Development of a new ladybug-like shell.  
+  -  **_Actuator Development – Outsourced_**   
+    _Development of casing and attachment of motors to wall._  
+
+- **Electrical**
+  - **Wire Management – Anika Roth**  
+    Implementing a wire management tactic within the body of the Wallbot.  
+  - **Wireless Control – Connor Williams**  
+    Replace wired connections with wireless control and communication.  
+    _In reference to hardware, protocols and ROS packages._  
+  - **Charging Station – Anika Roth**  
+    Designing and implementing an onboard power source and a way to charge it.  
+
+- **Mechatronics**
+  - **Motor Communication – Connor Williams**  
+    Handling of motor driver to motor communication using CANBus.  
+    *In reference to CANBus protocol and hardware requirements.*  
+  - **Motor Control – Benjamin Cooper**  
+    Handling of motor speeds and motion of Wallbot.  
+    _In reference to hardware limitations._  
+  - **Path Planning – Benjamin Cooper**  
+    Predefined path for robot to follow during demonstration.  
+
+- **Software**
+  - **UI – Anton Cecire**  
+    UI to visually show the on-board sensors on the Wallbot.  
+
+- **Project Management / Oversight**
+  - **Team Lead – Dylan Purbrick**  
+    Responsible for overall project coordination, documentation, and client liaison.  
 
 ---
 
@@ -90,7 +126,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 **Wallbug Colour Palette**  
 
 | Colour Name   | Hex Code   | Swatch |
-|---------------|------------|--------|
+|---------------|:----------:|:------:|
 | Dark Green    | `#3A5A40`  | ![Dark Green](https://img.shields.io/badge/-----------?style=flat-square&labelColor=3A5A40&color=3A5A40&logoColor=3A5A40) |
 | Sage Green    | `#A3B18A`  | ![Sage Green](https://img.shields.io/badge/-----------?style=flat-square&labelColor=A3B18A&color=A3B18A&logoColor=A3B18A) |
 | Light Neutral | `#EAE8E2`  | ![Light Neutral](https://img.shields.io/badge/-----------?style=flat-square&labelColor=EAE8E2&color=EAE8E2&logoColor=EAE8E2) |
@@ -124,7 +160,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 ### The Wallbug Team  
 
 | Name               | Role                    | Responsibilities                                                |
-|--------------------|-------------------------|----------------------------------------------------------------|
+|--------------------|:-----------------------:|-----------------------------------------------------------------|
 | **Anika Roth**     | Electrical Lead         | Electrical design, embedded systems, wiring                     |
 | **Anton Cecire**   | Interface Lead          | UI design, interface integration                                |
 | **Benjamin Cooper**| Movement Lead           | Wallbot movement, subsystem integration                         |
@@ -154,8 +190,8 @@ All supporting materials, including CAD files, technical documentation, and meet
 
 The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 Novemeber 2025** by **The Wallbug Team**.  
 This delivery marks the completion of work as specified in:  
-- *Project Scope and Specifications – Rev E (Signed)*  
-- *Project Handover Plan – Rev B*  
+- _Project Scope and Specifications – Rev E (Signed)_  
+- _Project Handover Plan – Rev B_  
 
 ~~All deliverables (D.1b - D.3b & D.4 – D.6) were demonstrated, verified, and accepted by the client in accordance with the final handover criteria.~~  
 
@@ -164,7 +200,7 @@ This delivery marks the completion of work as specified in:
 ![Version](https://img.shields.io/badge/Version_History-%23669EBC?style=for-the-badge&logoColor=white)
 
 | Document | Version | Date | Description |
-|-----------|----------|------|--------------|
+|-----------|:--------:|:----:|--------------|
 | Project Scope & Specifications | Rev E | 11 Oct 2025 | Final signed version by Client |
 | Project Handover Plan | Rev B | 24 Oct 2025 | Accepted handover deliverables & completion record |
 
