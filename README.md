@@ -81,7 +81,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 
 > _Figure 1. High-Level Work Breakdown Structure for Wallbot System Development – Wallbug Iteration_  
-> 📎 [View editable WBS (Google Drawings)](https://docs.google.com/drawings/d/1HzqvC_d6uhQx4mHRx4d34mvmRflEmt4HzOK0eZC4jhY/edit?usp=sharing)
+> 📎 [View WBS (Google Drawings)](https://docs.google.com/drawings/d/1HzqvC_d6uhQx4mHRx4d34mvmRflEmt4HzOK0eZC4jhY/edit?usp=sharing)
 
 
 ### 🧩 WBS Description (Extract from Project Scope and Specifications Rev E)
