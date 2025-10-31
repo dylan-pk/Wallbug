@@ -71,7 +71,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 | **D.5** | Supplying all CAD files to Client (Marc) in the handover | ☐ |
 | **D.6** | Supplying all code files to Client (Marc) in the handover | ☐ |
 
-  _✅Completed will populate the "Status" column upon handover_  
+  "✅Completed" _will populate the "Status" column upon handover_  
   
 ---
 
