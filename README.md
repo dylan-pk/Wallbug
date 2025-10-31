@@ -131,7 +131,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ### Extended Contributors  
 - **Dana** – Winches & Mechanical Actuation  
-- **Adithya** – External Student, Wallbot Project Management Support  
+- **Adithya** – External Student, Wider Wallbot Project Management  
 
 ### Client and Coach  
 - **Marc Carmichael** – Client (UTS Robotics Institute, Head Tutor DMMS)  
