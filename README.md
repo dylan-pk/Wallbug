@@ -75,10 +75,13 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ![Work Breakdown](https://img.shields.io/badge/Work_Breakdown_Structure-%233A5A40?style=for-the-badge&logoColor=white)
 
-- **Mechanical** – Shell redevelopment, winches, and safety systems  
-- **Electrical** – Motor communication (CANBus), wiring, and load cell integration  
-- **Mechatronics** – Motion control, path planning, and subsystem integration  
-- **UI** – Wireless control interface and live sensor display  
+<p align="center">
+  <img src="https://docs.google.com/drawings/d/e/2PACX-1vQRKzZUNqPZjXplz8AnqKoSKiiIOJTEvibl5ZlPDjqprP8tEGBfvGFfV0hOhyBmGjDRLVORC9NoSYw-/pub?w=2059&amp;h=689" width="850" alt="Work Breakdown Structure Diagram">
+  <br>
+  <em>Figure 1. High-Level Work Breakdown Structure for Wallbot System Development – Wallbug Iteration</em>
+</p>
+
+> 📎 [View WBS (Google Drawings)](https://docs.google.com/drawings/d/1HzqvC_d6uhQx4mHRx4d34mvmRflEmt4HzOK0eZC4jhY/edit?usp=sharing)
 
 ---
 
