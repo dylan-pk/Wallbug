@@ -63,7 +63,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 **As defined in Project Handover Plan (Rev B)**  
 
 | Deliverable ID | Description | Status |
-|:--------------:|--------------|:-------:|
+|:--------------:|:--------------|:-------:|
 | **D.1b** | Framework for the UI displaying on-board mock-up of sensors | ☐ |
 | **D.2b** | A simulation demonstrating the Wallbot’s movement along a pre-planned path and a code framework for wireless communication | ☐ |
 | **D.3b** | Upgraded mechanical shell to facilitate nicer wire management and durability | ☐ |
@@ -126,7 +126,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 **Wallbug Colour Palette**  
 
 | Colour Name   | Hex Code   | Swatch |
-|---------------|:----------:|:------:|
+|:---------------|:----------:|:------:|
 | Dark Green    | `#3A5A40`  | ![Dark Green](https://img.shields.io/badge/-----------?style=flat-square&labelColor=3A5A40&color=3A5A40&logoColor=3A5A40) |
 | Sage Green    | `#A3B18A`  | ![Sage Green](https://img.shields.io/badge/-----------?style=flat-square&labelColor=A3B18A&color=A3B18A&logoColor=A3B18A) |
 | Light Neutral | `#EAE8E2`  | ![Light Neutral](https://img.shields.io/badge/-----------?style=flat-square&labelColor=EAE8E2&color=EAE8E2&logoColor=EAE8E2) |
@@ -160,7 +160,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 ### The Wallbug Team  
 
 | Name               | Role                    | Responsibilities                                                |
-|--------------------|:-----------------------:|-----------------------------------------------------------------|
+|:-------------------|:-----------------------:|:----------------------------------------------------------------|
 | **Anika Roth**     | Electrical Lead         | Electrical design, embedded systems, wiring                     |
 | **Anton Cecire**   | Interface Lead          | UI design, interface integration                                |
 | **Benjamin Cooper**| Movement Lead           | Wallbot movement, subsystem integration                         |
@@ -200,7 +200,7 @@ This delivery marks the completion of work as specified in:
 ![Version](https://img.shields.io/badge/Version_History-%23669EBC?style=for-the-badge&logoColor=white)
 
 | Document | Version | Date | Description |
-|-----------|:--------:|:----:|--------------|
+|:-----------|:--------:|:----:|:--------------|
 | Project Scope & Specifications | Rev E | 11 Oct 2025 | Final signed version by Client |
 | Project Handover Plan | Rev B | 24 Oct 2025 | Accepted handover deliverables & completion record |
 
