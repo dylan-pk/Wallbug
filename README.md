@@ -84,7 +84,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 > 📎 [View WBS (Google Drawings)](https://docs.google.com/drawings/d/1HzqvC_d6uhQx4mHRx4d34mvmRflEmt4HzOK0eZC4jhY/edit?usp=sharing)
 
 
-### 🧩 WBS Description (Extract from Project Scope and Specifications Rev E)
+### _WBS Description Summary_ 
  
 - **Mechanical**
   - **Shell Redevelopment – Fadi Alameddine**  
@@ -118,6 +118,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 - **Project Management / Oversight**
   - **Team Lead – Dylan Purbrick**  
     Responsible for overall project coordination, documentation, and client liaison.  
+> _The above can be found within Project Specification (Rev E)_
 
 ---
 
@@ -188,10 +189,10 @@ All supporting materials, including CAD files, technical documentation, and meet
 
 ![Handover](https://img.shields.io/badge/Handover_Completion-%233A5A40?style=for-the-badge&logoColor=white)
 
-The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 Novemeber 2025** by **The Wallbug Team**.  
+~~The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 Novemeber 2025** by **The Wallbug Team**.~~  
 This delivery marks the completion of work as specified in:  
 - _Project Scope and Specifications – Rev E (Signed)_  
-- _Project Handover Plan – Rev B_  
+- _Project Handover Plan – Rev B_  ~~
 
 ~~All deliverables (D.1b - D.3b & D.4 – D.6) were demonstrated, verified, and accepted by the client in accordance with the final handover criteria.~~  
 
@@ -203,6 +204,7 @@ This delivery marks the completion of work as specified in:
 |:-----------|:--------:|:----:|:--------------|
 | Project Scope & Specifications | Rev E | 11 Oct 2025 | Final signed version by Client |
 | Project Handover Plan | Rev B | 24 Oct 2025 | Accepted handover deliverables & completion record |
+
 
 ---
 
