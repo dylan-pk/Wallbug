@@ -22,7 +22,8 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ---
 
-![Scope](https://img.shields.io/badge/Scope-%23669EBC?style=for-the-badge&logoColor=white)
+<h2 id="scope">&#8203;</h2>
+<img src="https://img.shields.io/badge/Scope-%23669EBC?style=for-the-badge&logoColor=white" alt="Scope">
 
 **In‑Scope**  
 - Robot movement  
@@ -41,7 +42,8 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ---
 
-![Requirements](https://img.shields.io/badge/Requirements-%23A3B18A?style=for-the-badge&logoColor=black)
+<h2 id="requirements">&#8203;</h2>
+<img src="https://img.shields.io/badge/Requirements-%23A3B18A?style=for-the-badge&logoColor=black" alt="Requirements">
 
 **Minimum Viable Product (MVP)**  
 - Structured and secure cable management system withput interfering with current sensors   
