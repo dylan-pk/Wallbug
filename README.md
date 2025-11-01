@@ -2,7 +2,7 @@
 
 ---
 
-![Overview](https://img.shields.io/badge/Overview-%23184E77?style=for-the-badge&logoColor=white)
+## ![Overview](https://img.shields.io/badge/Overview-%23184E77?style=for-the-badge&logoColor=white)
 
 The **Wallbot System Development** project represents the finalised redevelopment and delivery of the _Wallbot_ platform by the **Wallbug Team** under the DMMS subject at the University of Technology Sydney.  
 The system is designed to traverse vertical surfaces and function as a **plant‑surveying robot**, equipped with sensors to monitor plant health and density.  
@@ -12,7 +12,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ---
 
-![Objectives](https://img.shields.io/badge/Objectives-%233A5A40?style=for-the-badge&logoColor=white)
+## ![Objectives](https://img.shields.io/badge/Objectives-%233A5A40?style=for-the-badge&logoColor=white)
 
 - Develop a safe, reliable, and visually engaging **Wallbot demonstration platform**.  
 - Enable **vertical traversal** and plant health data collection via onboard sensors.  
@@ -22,7 +22,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ---
 
-![Scope](https://img.shields.io/badge/Scope-%23669EBC?style=for-the-badge&logoColor=white)
+## ![Scope](https://img.shields.io/badge/Scope-%23669EBC?style=for-the-badge&logoColor=white)
 
 **In‑Scope**  
 - Robot movement  
@@ -41,7 +41,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ---
 
-![Requirements](https://img.shields.io/badge/Requirements-%23A3B18A?style=for-the-badge&logoColor=black)
+## ![Requirements](https://img.shields.io/badge/Requirements-%23A3B18A?style=for-the-badge&logoColor=black)
 
 **Minimum Viable Product (MVP)**  
 - Structured and secure cable management system withput interfering with current sensors   
@@ -58,7 +58,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ---
 
-![Deliverables](https://img.shields.io/badge/Deliverables-%23184E77?style=for-the-badge&logoColor=white)
+## ![Deliverables](https://img.shields.io/badge/Deliverables-%23184E77?style=for-the-badge&logoColor=white)
 
 **As defined in Project Handover Plan (Rev B)**  
 
@@ -75,7 +75,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
   
 ---
 
-![Work Breakdown](https://img.shields.io/badge/Work_Breakdown_Structure-%233A5A40?style=for-the-badge&logoColor=white)
+## ![Work Breakdown](https://img.shields.io/badge/Work_Breakdown_Structure-%233A5A40?style=for-the-badge&logoColor=white)
 
 ![Work Breakdown Structure](https://docs.google.com/drawings/d/e/2PACX-1vQRKzZUNqPZjXplz8AnqKoSKiiIOJTEvibl5ZlPDjqprP8tEGBfvGFfV0hOhyBmGjDRLVORC9NoSYw-/pub?w=3089&h=1033)
 
@@ -122,7 +122,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ---
 
-![Visual Identity](https://img.shields.io/badge/Visual_Identity-%23669EBC?style=for-the-badge&logoColor=white)
+## ![Visual Identity](https://img.shields.io/badge/Visual_Identity-%23669EBC?style=for-the-badge&logoColor=white)
 
 **Wallbug Colour Palette**  
 
@@ -136,7 +136,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ---
 
-![Getting Started](https://img.shields.io/badge/Getting_Started-%23A3B18A?style=for-the-badge&logoColor=black)
+## ![Getting Started](https://img.shields.io/badge/Getting_Started-%23A3B18A?style=for-the-badge&logoColor=black)
 
 1. Clone the repository:  
    ```bash
@@ -156,7 +156,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ---
 
-![Team](https://img.shields.io/badge/Team_%26_Contributors-%23184E77?style=for-the-badge&logoColor=white)
+## ![Team](https://img.shields.io/badge/Team_%26_Contributors-%23184E77?style=for-the-badge&logoColor=white)
 
 ### The Wallbug Team  
 
@@ -179,7 +179,7 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 ---
 
-![Documentation](https://img.shields.io/badge/Documentation-%23669EBC?style=for-the-badge&logoColor=white)
+## ![Documentation](https://img.shields.io/badge/Documentation-%23669EBC?style=for-the-badge&logoColor=white)
 
 All supporting materials, including CAD files, technical documentation, and meeting records, are stored within:  
 - The **DMMS MS Teams → Wallbot System Development Channel**, and  
@@ -187,7 +187,7 @@ All supporting materials, including CAD files, technical documentation, and meet
 
 ---
 
-![Handover](https://img.shields.io/badge/Handover_Completion-%233A5A40?style=for-the-badge&logoColor=white)
+## ![Handover](https://img.shields.io/badge/Handover_Completion-%233A5A40?style=for-the-badge&logoColor=white)
 
 ~~The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 Novemeber 2025** by **The Wallbug Team**.~~  
 This delivery marks the completion of work as specified in:  
@@ -198,7 +198,7 @@ This delivery marks the completion of work as specified in:
 
 ---
 
-![Version](https://img.shields.io/badge/Version_History-%23669EBC?style=for-the-badge&logoColor=white)
+## ![Version](https://img.shields.io/badge/Version_History-%23669EBC?style=for-the-badge&logoColor=white)
 
 | Document | Version | Date | Description |
 |:-----------|:--------:|:----:|:--------------|
@@ -208,6 +208,6 @@ This delivery marks the completion of work as specified in:
 
 ---
 
-![License](https://img.shields.io/badge/License-%233A5A40?style=for-the-badge&logoColor=white)
+## ![License](https://img.shields.io/badge/License-%233A5A40?style=for-the-badge&logoColor=white)
 
 This project is currently unlicensed. All rights reserved to the Wallbug Team and collaborators.  
