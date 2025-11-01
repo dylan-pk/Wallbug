@@ -2,9 +2,7 @@
 
 ---
 
-<h2 id="objectives">
-  <img src="https://img.shields.io/badge/Objectives-%233A5A40?style=for-the-badge&logoColor=white" alt="Objectives">
-</h2>
+![Overview](https://img.shields.io/badge/Overview-%23184E77?style=for-the-badge&logoColor=white)
 
 The **Wallbot System Development** project represents the finalised redevelopment and delivery of the _Wallbot_ platform by the **Wallbug Team** under the DMMS subject at the University of Technology Sydney.  
 The system is designed to traverse vertical surfaces and function as a **plant‑surveying robot**, equipped with sensors to monitor plant health and density.  
