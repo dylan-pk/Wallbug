@@ -194,7 +194,7 @@ All supporting materials, including CAD files, technical documentation, and meet
 ~~The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 Novemeber 2025** by **The Wallbug Team**.~~  
 This delivery marks the completion of work as specified in:  
 - _Project Scope and Specifications – Rev E (Signed)_  
-- _Project Handover Plan – Rev B_  ~~
+- _Project Handover Plan – Rev B (Signed)_  
 
 ~~All deliverables (D.1b - D.3b & D.4 – D.6) were demonstrated, verified, and accepted by the client in accordance with the final handover criteria.~~  
 
@@ -205,7 +205,7 @@ This delivery marks the completion of work as specified in:
 | Document | Version | Date | Description |
 |:-----------|:--------:|:----:|:--------------|
 | Project Scope & Specifications | Rev E | 11 Oct 2025 | Final signed version by Client |
-| Project Handover Plan | Rev B | 24 Oct 2025 | Accepted handover deliverables & completion record |
+| Project Handover Plan | Rev B | 3 Nov 2025 | Accepted handover deliverables & completion record |
 
 
 ---
