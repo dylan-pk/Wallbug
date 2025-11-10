@@ -4,7 +4,7 @@ project(wallbot_tl_root)
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY launch rviz urdf yaml
+  DIRECTORY launch rviz urdf yaml world
   DESTINATION share/${PROJECT_NAME}
 )
 

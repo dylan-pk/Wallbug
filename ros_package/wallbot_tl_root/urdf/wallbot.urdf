@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <robot name="wallbot">
-
     <material name="cable_grey">
         <color rgba="0.2 0.2 0.2 1"/>
     </material>
@@ -19,10 +18,30 @@
                 <box size="0.8 0.5 0.6"/>
             </geometry>
             <material name="wallbot_red"/>
-        </visual>  
+        </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
 
     <link name="tl_anchor">
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
 
     <!--Top Left Links-->
@@ -34,6 +53,16 @@
             </geometry>
             <material name="wallbot_red"/>
         </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
 
     <link name="top_left_cable">
@@ -44,7 +73,18 @@
             <material name="cable_grey"/>
             <origin xyz="0 0 2" rpy="0 0 0"/>
         </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
+
     <link name="top_left_anchor">
         <visual>
             <geometry>
@@ -53,6 +93,16 @@
             <material name="anchor_green"/>
             <origin rpy="1.57075 0 0" xyz="0 0 0"/>
         </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
 
     <!--Top Left Joints (Fixed -> Revolute -> Prismatic)-->
@@ -96,6 +146,18 @@
             </geometry>
             <material name="wallbot_red"/>
         </visual>
+
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
+
     </link>
 
     <link name="top_right_cable">
@@ -106,6 +168,16 @@
             <material name="cable_grey"/>
             <origin xyz="0 0 2" rpy="0 0 0"/>
         </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
     <link name="top_right_anchor">
         <visual>
@@ -115,6 +187,16 @@
             <material name="anchor_green"/>
             <origin rpy="1.57075 0 0" xyz="0 0 0.1"/>
         </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
 
     <!--Top Right Joints (Fixed -> Revolute -> Prismatic)-->
@@ -150,6 +232,16 @@
             </geometry>
             <material name="wallbot_red"/>
         </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
 
     <link name="bottom_left_cable">
@@ -160,6 +252,16 @@
             <material name="cable_grey"/>
             <origin xyz="0 0 2" rpy="0 0 0"/>
         </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
     <link name="bottom_left_anchor">
         <visual>
@@ -168,7 +270,17 @@
             </geometry>
             <material name="anchor_green"/>
             <origin rpy="1.57075 0 0" xyz="0 0 0.1"/>
-        </visual>  
+        </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>  
     </link>
 
     <!--Bottom Left Joints (Fixed -> Revolute -> Prismatic)-->
@@ -204,7 +316,16 @@
             </geometry>
             <material name="wallbot_red"/>
         </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
         
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
 
     <link name="bottom_right_cable">
@@ -215,6 +336,16 @@
             <material name="cable_grey"/>
             <origin xyz="0 0 2" rpy="0 0 0"/>
         </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
     <link name="bottom_right_anchor">
         <visual>
@@ -224,6 +355,16 @@
             <material name="anchor_green"/>
             <origin rpy="1.57075 0 0" xyz="0 0 0.1"/>
         </visual>
+        <collision>
+          <geometry>
+            <box size="0.01 0.01 0.01"/>
+          </geometry>
+        </collision>
+        
+        <inertial>
+          <mass value="0.1"/>
+          <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
     </link>
 
     <!--Bottom Right Joints (Fixed -> Revolute -> Prismatic)-->
@@ -252,8 +393,7 @@
 
     <ros2_control name="wallbot_tl_root" type="system">
       <hardware>
-        <plugin>ros2_control_demo_hardware/FakeSystemHardware</plugin>
-        <param name="update_rate">100</param>
+        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
       </hardware>
 
       <joint name="tl_anchor_rev_joint">
@@ -274,12 +414,6 @@
         <state_interface name="velocity"/>
       </joint>
 
-      <joint name="base_to_top_left_socket">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-      </joint>
-
       <joint name="top_right_prismatic_joint">
         <command_interface name="position"/>
         <state_interface name="position"/>
@@ -287,12 +421,6 @@
       </joint>
 
       <joint name="top_right_socket_cable_connector">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-      </joint>
-
-      <joint name="base_to_top_right_socket">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
@@ -310,12 +438,6 @@
         <state_interface name="velocity"/>
       </joint>
 
-      <joint name="base_to_bottom_left_socket">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-      </joint>
-
       <joint name="bottom_right_prismatic_joint">
         <command_interface name="position"/>
         <state_interface name="position"/>
@@ -328,10 +450,11 @@
         <state_interface name="velocity"/>
       </joint>
 
-      <joint name="base_to_bottom_right_socket">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-      </joint>
     </ros2_control>
+
+    <gazebo>
+        <plugin name="wallbot_tl_root" filename="libgazebo_ros2_control.so">
+            <parameters>$(find wallbot_tl_root)/yaml/ros_controller.yaml</parameters>
+        </plugin>
+    </gazebo>
 </robot>

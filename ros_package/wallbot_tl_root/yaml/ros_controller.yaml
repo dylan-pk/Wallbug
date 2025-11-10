@@ -1,6 +1,7 @@
-ros2_control_node:
+controller_manager:
   ros__parameters:
-    update_rate: 100
+    update_rate: 1000
+    use_sim_time: true
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
@@ -14,16 +15,13 @@ joint_trajectory_controller:
       - tl_anchor_rev_joint
       - top_left_prismatic_joint
       - top_left_socket_cable_connector
-      - base_to_top_left_socket
       - top_right_prismatic_joint
       - top_right_socket_cable_connector
-      - base_to_top_right_socket
       - bottom_left_prismatic_joint
       - bottom_left_socket_cable_connector
-      - base_to_bottom_left_socket
       - bottom_right_prismatic_joint
       - bottom_right_socket_cable_connector
-      - base_to_bottom_right_socket
+
 
     command_interfaces:
       - position
