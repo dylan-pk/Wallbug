@@ -393,7 +393,7 @@
 
     <ros2_control name="wallbot_tl_root" type="system">
       <hardware>
-        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        <plugin>ign_ros2_control/IgnitionSystem</plugin>
       </hardware>
 
       <joint name="tl_anchor_rev_joint">
@@ -453,8 +453,11 @@
     </ros2_control>
 
     <gazebo>
-        <plugin name="wallbot_tl_root" filename="libgazebo_ros2_control.so">
-            <parameters>$(find wallbot_tl_root)/yaml/ros_controller.yaml</parameters>
-        </plugin>
+      <plugin name="ign_ros2_control::IgnitionROS2ControlPlugin" filename="libign_ros2_control-system.so">
+        <ros>
+          <namespace>/</namespace>
+        </ros>
+        <parameters>$(find wallbot_tl_root)/yaml/ros_controller.yaml</parameters>
+      </plugin>
     </gazebo>
 </robot>
