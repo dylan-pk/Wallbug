@@ -4,7 +4,7 @@ import os
 import yaml
 import rclpy
 from geometry_msgs.msg import PoseStamped
-from src.wallbot_node import Wallbot
+from wallbot_node import Wallbot
 from wallbot.srv import SetGoal
 import threading
 import time
@@ -17,7 +17,7 @@ GEARBOX_FILE = "Apex_No:PA_2_090-S2.yml"
 PATH_PLAN_FILE = "path_plan.yml"
 WALLBOT_FILE = "wallbot_config.yml"
 
-WALLBOT_STARTING_POSE = [2.0, 2.0]
+WALLBOT_STARTING_POSE = [0.0, 0.7, 1.5]
 
 
 def load_yaml(file_path):
@@ -26,7 +26,8 @@ def load_yaml(file_path):
 
 
 def run_demo_once(service_client, path_goals, node):
-    """Send each goal in path_goals via service call to wallbot/set_goal."""
+    """Send each goal in path_goals via service call to wallbot/set_goal.
+       Keep retrying the same goal until accepted."""
     for goal in path_goals:
         try:
             x = float(goal[0])
@@ -38,7 +39,6 @@ def run_demo_once(service_client, path_goals, node):
 
         msg = PoseStamped()
         msg.header.frame_id = "map"
-        msg.header.stamp = node.get_clock().now().to_msg()
         msg.pose.position.x = x
         msg.pose.position.y = y
         msg.pose.position.z = z
@@ -47,25 +47,27 @@ def run_demo_once(service_client, path_goals, node):
         request = SetGoal.Request()
         request.goal = msg
 
-        node.get_logger().info(f"Sending goal via service: [{x}, {y}, {z}]")
+        accepted = False
+        while not accepted and rclpy.ok():
+            msg.header.stamp = node.get_clock().now().to_msg()  # update timestamp each try
+            request.goal = msg
+            node.get_logger().info(f"Sending goal via service: [{x}, {y}, {z}]")
 
-        future = service_client.call_async(request)
+            future = service_client.call_async(request)
+            rclpy.spin_until_future_complete(node, future, timeout_sec=5.0)
 
-        # Wait for result
-        rclpy.spin_until_future_complete(node, future, timeout_sec=5.0)
-
-        if future.result() is not None:
-            if future.result().accepted:
-                node.get_logger().info("Goal accepted by Wallbot.")
+            if future.result() is not None:
+                if future.result().accepted:
+                    node.get_logger().info("Goal accepted by Wallbot.")
+                    accepted = True
+                else:
+                    node.get_logger().warn("Goal rejected by Wallbot. Retrying in 5s...")
+                    time.sleep(5.0)
             else:
-                node.get_logger().warn("Goal rejected by Wallbot.")
-        else:
-            node.get_logger().error("Service call failed or timed out.")
-
-        time.sleep(1.0)
+                node.get_logger().error("Service call failed or timed out. Retrying in 5s...")
+                time.sleep(5.0)
 
     return True
-
 
 def wallbot_spin(wallbot_node):
     """Run rclpy.spin_once in a separate thread for the Wallbot node."""

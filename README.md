@@ -156,6 +156,8 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
    python ui/main.py
    ```
 
+  python3 src/wallbot/src/demo.py
+
 ---
 
 ![Team](https://img.shields.io/badge/Team_%26_Contributors-%23184E77?style=for-the-badge&logoColor=white)

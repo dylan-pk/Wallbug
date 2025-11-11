@@ -11,4 +11,5 @@ environment:
 
 current_position:
   x: 2
-  y: 2
+  y: 0.7
+  z: 2

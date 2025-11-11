@@ -16,7 +16,7 @@ class Wallbot(Node):
         self.state = SystemState.IDLE
 
         # Motor controller
-        self.motor_controller = MotorController(self.wallbot_specs, gearbox_specs, motor_specs)
+        self.motor_controller = MotorController(self.wallbot_specs, gearbox_specs, motor_specs, self)
 
         # Create service
         self.goal_service = self.create_service(SetGoal, 'wallbot/set_goal', self.handle_set_goal)
@@ -25,15 +25,16 @@ class Wallbot(Node):
     def handle_set_goal(self, request: SetGoal.Request, response: SetGoal.Response):
         goal = request.goal
 
-        self.get_logger().info(f"Received service goal: {[goal.pose.position.x, goal.pose.position.y, goal.pose.position.z]}")
+        
         
         if self.state != SystemState.IDLE:
-            self.get_logger().warn('Wallbot is not idle, goal rejected.')
+            self.get_logger().warn('Wallbot is busy, goal rejected.')
             response.accepted = False
             return response
 
+        self.get_logger().info(f"Received service goal: {[goal.pose.position.x, goal.pose.position.y, goal.pose.position.z]}")
         self.motor_controller.compute_trajectories(goal, self.pose)
-        self.motor_controller.send_trajectories()
+        # self.motor_controller.send_trajectories()
         self.state = SystemState.RUNNING
         response.accepted = True
         return response
@@ -43,7 +44,7 @@ class Wallbot(Node):
         Ignores if robot is busy and sends new goal
         '''
         self.motor_controller.compute_trajectories(goal, self.pose)
-        self.motor_controller.send_trajectories()
+        # self.motor_controller.send_trajectories()
         self.state = SystemState.RUNNING
 
     def all_stop(self):

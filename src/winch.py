@@ -3,52 +3,79 @@ from utils import SystemState
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 class WinchProfile():
-    motor_output_power = None
-    gearbox_output_speed = None
-    gearbox_max_speed = 4
-    gearbox_output_torque = None
-    motor_torque_max_current = None
-    relfected_inertia = None
-    gearbox_output_power = None
-    max_linear_acceleration = None
-    nominal_angular_velocity = None
-    max_angular_velocity = None
-    max_linear_velocity = None
-    gearbox_at_max_current = None
-    max_angular_acceleration = None
+        #Motor specs
+        motor_voltage = None
+        motor_current = None
+        motor_max_irms_current = None
+        nominal_motor_speed = None
+        motor_nominal_torque = None
+        motor_rotor_inertia = None
+
+        #Gearbox specs
+        gear_ratio = None
+        gearbox_efficiency = None
+        gearbox_nominal_output_torque = None
+        gearbox_max_input_speed = None
+
+        #Wallbot / environment specs
+        pulley_radius = None
+        wallbot_weight = None
+
+        #Profile outputs
+        motor_output_power = None
+        gearbox_output_speed = None
+        gearbox_max_speed = None
+        gearbox_output_torque = None
+        motor_torque_max_current = None
+        reflected_inertia = None
+        gearbox_output_power = None
+        nominal_angular_velocity = None
+        nominal_linear_velocity = None
+        max_angular_velocity = None
+        max_linear_velocity = None
+        gearbox_at_max_current = None
+        max_angular_acceleration = None
+
 
 class Winch:
     def __init__(self, winch_id, winch_profile, wallbot_node, position):
         self.id = winch_id
         self.profile = winch_profile
-        self.position = position  # [x, y]
+        self.position = position  # [x, y, z]
         self.wallbot_node = wallbot_node
         self.state = SystemState.IDLE
 
         self.trajectory = None
+        self.move_time = None
 
-        # Publisher for traj.
-        self.publisher = self.wallbot_node.create_publisher(JointTrajectory, f'winch_{winch_id}/trajectory', 10)
+        # Publisher for trajectory
+        self.publisher = self.wallbot_node.create_publisher(
+            JointTrajectory, f'winch_{winch_id}/trajectory', 10
+        )
 
-    def publish_trajectory(self, trajectory, total_time=None):
-        """
-        Publish a full rope length trajectory as a JointTrajectory message.
-        """
-        traj_msg = JointTrajectory()
-        traj_msg.joint_names = [f'winch_{self.id}_rope']
+    def set_trajectory(self, trajectory, move_time):
+        self.trajectory = trajectory
+        self.move_time = move_time
 
-        n_points = len(trajectory)
-        if total_time is None:
-            total_time = n_points * 0.01  # default to 0.01s per step
+    def publish_trajectory(self):
+        if not self.trajectory:
+            print(f"[WARN] Winch {self.id} has no trajectory to publish.")
+            return
 
-        dt = total_time / n_points
+        msg = JointTrajectory()
+        msg.joint_names = [f"winch_{self.id}_joint"]
 
-        for i, length in enumerate(trajectory):
-            point = JointTrajectoryPoint()
-            point.positions = [float(length)]
-            point.time_from_start.sec = int(i * dt)
-            point.time_from_start.nanosec = int((i * dt % 1) * 1e9)
-            traj_msg.points.append(point)
+        for i, point in enumerate(self.trajectory):
+            if isinstance(point, JointTrajectoryPoint):
+                msg.points.append(point)
+            else:
+                # Convert float to JointTrajectoryPoint if needed
+                jp = JointTrajectoryPoint()
+                jp.positions = [float(point)]
+                jp.time_from_start.sec = int(i)
+                jp.time_from_start.nanosec = 0
+                msg.points.append(jp)
 
-        self.publisher.publish(traj_msg)
-        self.wallbot_node.get_logger().info(f"Winch {self.id} publishing trajectory with {n_points} points")
+        self.publisher.publish(msg)
+        print(f"[INFO] Published trajectory for Winch {self.id} with {len(msg.points)} points.")
+
