@@ -15,14 +15,18 @@
     <link name="central_body">
         <visual>
             <geometry>
-                <box size="0.8 0.5 0.6"/>
+                <mesh filename="model://wallbot_body.stl" scale="0.002 0.002 0.002">
+                </mesh>
+                
             </geometry>
             <material name="wallbot_red"/>
+             <origin xyz="-0.9 0.3 -0.5" rpy="3.14159 -1.57075 0"/>
         </visual>
         <collision>
           <geometry>
             <box size="0.01 0.01 0.01"/>
           </geometry>
+         
         </collision>
 
         <inertial>
@@ -393,7 +397,7 @@
 
     <ros2_control name="wallbot_tl_root" type="system">
       <hardware>
-        <plugin>ign_ros2_control/IgnitionSystem</plugin>
+        <plugin>gz_ros2_control/GazeboSimSystem</plugin>
       </hardware>
 
       <joint name="tl_anchor_rev_joint">
@@ -453,7 +457,7 @@
     </ros2_control>
 
     <gazebo>
-      <plugin name="ign_ros2_control::IgnitionROS2ControlPlugin" filename="libign_ros2_control-system.so">
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
         <ros>
           <namespace>/</namespace>
         </ros>
