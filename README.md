@@ -155,8 +155,13 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
    ```bash
    python ui/main.py
    ```
-
-  python3 src/wallbot/src/demo.py
+4. Run the Wallbot demo:  
+   ```bash
+   colcon build --packages-select wallbot
+   source install/setup.bash
+   python3 src/Wallbug/src/demo.py
+   ```
+  
 
 ---
 

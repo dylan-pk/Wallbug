@@ -22,6 +22,19 @@ from calcUtils import (
 
 
 class MotorController:
+    #joint names to match ros_controller.yaml
+    CONTROLLER_JOINTS = [
+        'tl_anchor_rev_joint',
+        'top_left_prismatic_joint',
+        'top_left_socket_cable_connector',
+        'top_right_prismatic_joint',
+        'top_right_socket_cable_connector',
+        'bottom_left_prismatic_joint',
+        'bottom_left_socket_cable_connector',
+        'bottom_right_prismatic_joint',
+        'bottom_right_socket_cable_connector'
+    ]
+
     def __init__(self, wallbot_specs, gearbox_specs, motor_specs, wallbot_node, num_winches=4):
         self.wallbot_specs = wallbot_specs
         self.gearbox_specs = gearbox_specs['gearbox']
@@ -31,12 +44,13 @@ class MotorController:
         self.winches = []
         self.winch_profile = self.generate_winch_profile()
 
-        # Publisher for combined joint trajectory
+        # Publisher to joint_trajectory_controller
         self.joint_traj_pub = wallbot_node.create_publisher(
             JointTrajectory, '/joint_trajectory_controller/joint_trajectory', 10
         )
 
         self.generate_winches()
+        self.current_anchor_angle = 0.0  # store current tl_anchor_rev_joint
 
     def generate_winch_profile(self):
         profile = WinchProfile()
@@ -124,6 +138,16 @@ class MotorController:
             rope_lengths.append(math.sqrt(dx**2 + dy**2 + dz**2))
         return rope_lengths
 
+    def compute_tl_anchor_angle(self, goal_pose):
+        """Compute desired tl_anchor_rev_joint angle from top-left winch to goal"""
+        wx, wy, _ = self.winches[0].position
+        gx = goal_pose.pose.position.x if hasattr(goal_pose, 'pose') else goal_pose[0]
+        gy = goal_pose.pose.position.y if hasattr(goal_pose, 'pose') else goal_pose[1]
+
+        dx = gx - wx
+        dy = gy - wy
+        return math.atan2(dy, dx)
+
     def compute_trajectories(self, goal, current_pose, n_steps=50):
         current_rope_lengths = self.compute_rope_lengths(current_pose)
         target_rope_lengths = self.compute_rope_lengths(goal)
@@ -136,39 +160,74 @@ class MotorController:
             f"Computed trajectories: move_time={move_time:.3f}s, largest_delta={largest_delta:.3f}m"
         )
 
-        # Create and send trajectory for each winch
+        #Compute target anchor angle
+        target_anchor_angle = self.compute_tl_anchor_angle(goal)
+
+        #Generate trajectory for each winch
         for i, winch in enumerate(self.winches):
             trajectory_points = []
             for step in range(n_steps):
                 pos = current_rope_lengths[i] + delta_rope_lengths[i] * (step / (n_steps - 1))
                 point = JointTrajectoryPoint()
-                point.positions = [pos]
+                point.positions = [pos]  #winch position placeholder
                 t = (step / (n_steps - 1)) * move_time
                 point.time_from_start.sec = int(t)
                 point.time_from_start.nanosec = int((t % 1) * 1e9)
                 trajectory_points.append(point)
+            winch.trajectory = trajectory_points
 
-            winch.trajectory = trajectory_points  # store in winch
-            winch.publish_trajectory()  # if winch has its own topic
+        #Publish combined trajectory with interpolated anchor angle
+        self.publish_joint_trajectory(target_anchor_angle)
 
-        # Publish combined trajectory message
-        self.publish_joint_trajectory()
+        #Update current anchor angle for next trajectory
+        self.current_anchor_angle = target_anchor_angle
 
-    def publish_joint_trajectory(self):
+    def publish_joint_trajectory(self, target_anchor_angle):
+        # Ensure we have a valid current anchor angle
+        if not hasattr(self, 'current_anchor_angle'):
+            self.current_anchor_angle = 0.0
+
         traj = JointTrajectory()
         traj.header.stamp = self.wallbot_node.get_clock().now().to_msg()
-        traj.joint_names = [f'winch_{i}_joint' for i in range(len(self.winches))]
+        traj.joint_names = self.CONTROLLER_JOINTS
 
-        # Assuming each winch has the same number of trajectory points
-        n_points = len(self.winches[0].trajectory)
+        # Make sure all winches have trajectories
+        n_points = min(len(w.trajectory) for w in self.winches if w.trajectory is not None)
+        if n_points == 0:
+            self.wallbot_node.get_logger().warn("No valid winch trajectories to publish")
+            return
+
         for step in range(n_points):
             point = JointTrajectoryPoint()
-            point.positions = [w.trajectory[step].positions[0] for w in self.winches]
+
+            # Linear interpolation of tl_anchor_rev_joint
+            interp_angle = self.current_anchor_angle + \
+                (target_anchor_angle - self.current_anchor_angle) * (step / (n_points - 1))
+
+            # Map winch trajectories to prismatic/socket joints
+            point.positions = [
+                interp_angle,  # tl_anchor_rev_joint
+                self.winches[0].trajectory[step].positions[0],  # top_left_prismatic
+                self.winches[0].trajectory[step].positions[0],  # top_left_socket
+                self.winches[1].trajectory[step].positions[0],  # top_right_prismatic
+                self.winches[1].trajectory[step].positions[0],  # top_right_socket
+                self.winches[2].trajectory[step].positions[0],  # bottom_left_prismatic
+                self.winches[2].trajectory[step].positions[0],  # bottom_left_socket
+                self.winches[3].trajectory[step].positions[0],  # bottom_right_prismatic
+                self.winches[3].trajectory[step].positions[0],  # bottom_right_socket
+            ]
+
             point.time_from_start = self.winches[0].trajectory[step].time_from_start
             traj.points.append(point)
 
+        # Publish trajectory
         self.joint_traj_pub.publish(traj)
-        self.wallbot_node.get_logger().info("Published combined joint trajectory to /joint_trajectory_controller/joint_trajectory")
+        self.wallbot_node.get_logger().info(
+            f"Published trajectory with {len(traj.points)} points to joint_trajectory_controller"
+        )
+
+        # Update current anchor angle for next trajectory
+        self.current_anchor_angle = target_anchor_angle
 
     def stop_winch(self, winch_id):
         winch = self.winches[winch_id]
