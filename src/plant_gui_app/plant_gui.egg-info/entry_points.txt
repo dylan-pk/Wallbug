@@ -1,0 +1,2 @@
+[console_scripts]
+plant-gui = plant_gui.app:main
