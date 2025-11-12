@@ -2,6 +2,14 @@
 <sdf version="1.6">
   <world name="wallbot_world">
 
+    <!-- Core Gazebo Harmonic system plugins -->
+    <plugin filename="libignition-gazebo6-physics-system.so"           name="ignition::gazebo::systems::Physics"/>
+    <plugin filename="libignition-gazebo6-sensors-system.so"           name="ignition::gazebo::systems::Sensors"/>
+    <plugin filename="libignition-gazebo6-user-commands-system.so"     name="ignition::gazebo::systems::UserCommands"/>
+    <plugin filename="libignition-gazebo6-scene-broadcaster-system.so" name="ignition::gazebo::systems::SceneBroadcaster"/>
+
+
+
     <physics type="ode">
     </physics>
     <gravity>0 0 0</gravity>

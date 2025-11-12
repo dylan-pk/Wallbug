@@ -8,6 +8,12 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(PROGRAMS
+  nodes/ndvi_node.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME ndvi_node
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
