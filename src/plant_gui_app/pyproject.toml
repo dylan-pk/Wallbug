@@ -5,17 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "plant-gui"
 version = "0.1.0"
-description = "Teleoperation-only Plant Health GUI (RGB-based colour analysis + NDVI* proxy)"
-readme = "README.md"
-requires-python = ">=3.8"
-license = {text = "MIT"}
-authors = [{ name = "Your Name" }]
-keywords = ["qt", "opencv", "pyside6", "plant", "ndvi", "rgb", "gui"]
-dependencies = [
-  "PySide6>=6.5",
-  "opencv-python>=4.8",
-  "numpy>=1.24"
-]
+description = "Nav2 mission GUI"
+requires-python = ">=3.10"
+# Do NOT list ROS/Apt packages like nav2_msgs here
+dependencies = ["PySide6"]  # add pure-pip deps only
 
 [project.scripts]
 plant-gui = "plant_gui.app:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+

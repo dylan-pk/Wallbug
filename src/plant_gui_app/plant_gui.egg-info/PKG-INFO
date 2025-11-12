@@ -1,20 +1,6 @@
 Metadata-Version: 2.4
 Name: plant-gui
 Version: 0.1.0
-Summary: Teleoperation-only Plant Health GUI (RGB-based colour analysis + NDVI* proxy)
-Author: Your Name
-License: MIT
-Keywords: qt,opencv,pyside6,plant,ndvi,rgb,gui
-Requires-Python: >=3.8
-Description-Content-Type: text/markdown
-Requires-Dist: PySide6>=6.5
-Requires-Dist: opencv-python>=4.8
-Requires-Dist: numpy>=1.24
-
-run this:
-
-cd /path/to/plant_gui_app          # folder containing pyproject.toml
-python3 -m venv .venv
-source .venv/bin/activate
-pip install .
-plant-gui
+Summary: Nav2 mission GUI
+Requires-Python: >=3.10
+Requires-Dist: PySide6

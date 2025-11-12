@@ -1,365 +1,714 @@
 #!/usr/bin/env python3
-import sys, time, os, tempfile, json, subprocess
-from dataclasses import dataclass
-from typing import Dict, Tuple, Optional
+"""
+Nav2 Mission GUI (PySide6 + ROS 2)
 
-import cv2
-import numpy as np
+Purpose
+-------
+Autonomous mission panel that loads waypoints from CSV and navigates with Nav2.
+Adds a live map with custom icons:
+- Robot icon = ladybug (fixed facing UP)
+- Waypoints = leaf icons: default "clear" until scanned, then green/yellow/red by scan result
+- Hover tooltip shows scan percentages per waypoint
+
+Layout
+------
+- Left: RGB + Thermal camera tiles (stacked vertically)
+- Right: Mission panel (Load, Start/Pause/Resume/Skip/Cancel, Loop) + live map
+- Map: renders /map (OccupancyGrid), shows waypoints + robot pose from /amcl_pose or /odom
+
+Key ROS Topics/Interfaces
+-------------------------
+- Action client: /navigate_to_pose (nav2_msgs/action/NavigateToPose)
+- Subscriptions: /map (nav_msgs/msg/OccupancyGrid); /amcl_pose (geometry_msgs/msg/PoseWithCovarianceStamped)
+                 fallback to /odom (nav_msgs/msg/Odometry) if /amcl_pose unavailable
+- Publisher: /mission/photo_request (std_msgs/String) when a waypoint with photo=true is reached
+- Subscription: /plant_scan_result (std_msgs/String) -> either CSV "name,green,yellow,brown" or JSON
+
+Waypoint File Format (CSV)
+--------------------------
+Header row required. Columns:
+  name,x,y,yaw_deg,frame_id,hold_sec,photo
+"""
+
+import csv
+import math
+import os
+import sys
+from dataclasses import dataclass
+from typing import List, Optional
+
 from PySide6 import QtCore, QtGui, QtWidgets
 
-# ---------------- Config ----------------
-CROP_SIZE   = 320                 # camera analysis crop (square)
-VIDEO_SIZE  = 320                 # square video panels (no side bars)
-WINDOW_SIZE = (900, 580)
+# ROS 2
+import rclpy
+from rclpy.action import ActionClient
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 
-CANVAS_SIZE   = 360               # square paintable panel
-STEP_PX       = 12                # pixels per arrow key press
-BRUSH_RADIUS  = 10                # paint brush radius (px)
+from nav2_msgs.action import NavigateToPose
+from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped, Quaternion
+from nav_msgs.msg import OccupancyGrid, Odometry
+from std_msgs.msg import String
 
-USE_NDVI_GREEN_BOOST = True
 
-# Optional: use your external C++ detector
-USE_CPP_DETECTOR   = False
-PLANT_COLOUR_EXE   = "./plantColour"  # path to your compiled exe
-
-# -------------- Theme (your colours) --------------
-COL_BASE_BG   = "#EAE8E2"  # main background
-COL_BORDER    = "#3A5A40"  # whole app border
-COL_HEADING   = "#184E77"  # headings
-COL_ACCENT    = "#669EBC"  # selection / accents
-
-def apply_theme(app: QtWidgets.QApplication):
-    style = f"""
-        QWidget {{
-            background: {COL_BASE_BG};
-            color: #1f2933;
-            font-size: 12px;
-        }}
-
-        QWidget#root {{
-            border: 3px solid {COL_BORDER};
-            border-radius: 10px;
-            background: {COL_BASE_BG};
-        }}
-
-        QGroupBox {{
-            background: transparent;
-            color: {COL_HEADING};
-            border: 1px solid rgba(0,0,0,0.15);
-            border-radius: 8px;
-            margin-top: 6px;
-            padding-top: 6px;
-            padding: 4px;
-            font-weight: 600;
-        }}
-        QGroupBox::title {{
-            subcontrol-origin: margin;
-            left: 10px;
-            padding: 0 4px;
-            color: {COL_HEADING};
-        }}
-
-        QLabel#heading {{
-            color: {COL_HEADING};
-            font-weight: 700;
-            font-size: 14px;
-        }}
-
-        QLabel[role="video"] {{
-            background: {COL_BASE_BG};
-            border: 1px solid {COL_ACCENT};
-            border-radius: 8px;
-        }}
-
-        QToolTip {{
-            background: {COL_BASE_BG};
-            color: #0d1321;
-            border: 1px solid {COL_HEADING};
-        }}
-    """
-    app.setStyleSheet(style)
-
-# -------------- Health / Color logic --------------
+# -----------------------------
+# Data structures
+# -----------------------------
 @dataclass
-class HealthResult:
-    perc_green: float
-    perc_yellow: float
-    perc_brown: float
-    health_label: str
+class Waypoint:
+    name: str
+    x: float
+    y: float
+    yaw_deg: float = 0.0
+    frame_id: str = "map"
+    hold_sec: float = 0.0
+    photo: bool = False
 
-def center_crop(frame_bgr: np.ndarray, size: int = CROP_SIZE) -> np.ndarray:
-    h, w = frame_bgr.shape[:2]
-    s = min(h, w)
-    y0 = (h - s) // 2
-    x0 = (w - s) // 2
-    crop = frame_bgr[y0:y0+s, x0:x0+s]
-    if crop.shape[0] != size:
-        crop = cv2.resize(crop, (size, size), interpolation=cv2.INTER_AREA)
-    return crop
+    def to_pose_stamped(self) -> PoseStamped:
+        ps = PoseStamped()
+        ps.header.frame_id = self.frame_id or "map"
+        ps.pose.position.x = float(self.x)
+        ps.pose.position.y = float(self.y)
+        # yaw (deg) -> quaternion (z,w)
+        yaw_rad = math.radians(self.yaw_deg)
+        qz = math.sin(yaw_rad / 2.0)
+        qw = math.cos(yaw_rad / 2.0)
+        ps.pose.orientation = Quaternion(x=0.0, y=0.0, z=qz, w=qw)
+        return ps
 
-def hsv_mask(frame_bgr, lower, upper):
-    hsv = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2HSV)
-    return cv2.inRange(hsv, np.array(lower), np.array(upper))
 
-def analyze_colors_bgr_python(frame_bgr: np.ndarray) -> Dict[str, float]:
-    green  = hsv_mask(frame_bgr, (35, 40, 40), (85, 255, 255))
-    yellow = hsv_mask(frame_bgr, (20,100,100), (35, 255, 255))
-    brown  = hsv_mask(frame_bgr, (10, 60, 20), (25, 200, 160))
-    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5,5))
-    green  = cv2.morphologyEx(green,  cv2.MORPH_OPEN, k)
-    yellow = cv2.morphologyEx(yellow, cv2.MORPH_OPEN, k)
-    brown  = cv2.morphologyEx(brown,  cv2.MORPH_OPEN, k)
-    total = max(frame_bgr.shape[0] * frame_bgr.shape[1], 1)
-    perc = {
-        "green":  100.0 * np.count_nonzero(green)  / total,
-        "yellow": 100.0 * np.count_nonzero(yellow) / total,
-        "brown":  100.0 * np.count_nonzero(brown)  / total,
-    }
-    s = sum(perc.values())
-    if s > 0:
-        for k_ in perc: perc[k_] *= (100.0 / s)
-    return perc
+# -----------------------------
+# ROS wrapper as QObject (composition, not multiple inheritance)
+# -----------------------------
+class MissionRos(QtCore.QObject):
+    # Qt signals (QObject required)
+    photoRequested    = QtCore.Signal(str)                        # waypoint name
+    feedbackText      = QtCore.Signal(str)
+    goalStatus        = QtCore.Signal(str)
+    robotPoseUpdated  = QtCore.Signal(float, float, float)        # x, y, yaw (rad)
+    mapUpdated        = QtCore.Signal(QtGui.QImage, float, float) # image, origin_x, origin_y
+    plantScanned      = QtCore.Signal(str, float, float, float)   # name, green%, yellow%, brown%
 
-def analyze_colors_bgr_cpp(frame_bgr: np.ndarray) -> Dict[str, float]:
-    if not os.path.isfile(PLANT_COLOUR_EXE) or not os.access(PLANT_COLOUR_EXE, os.X_OK):
-        raise FileNotFoundError(f"plantColour exe not found or not executable at: {PLANT_COLOUR_EXE}")
-    fd, tmp_path = tempfile.mkstemp(suffix=".png"); os.close(fd)
-    try:
-        cv2.imwrite(tmp_path, frame_bgr)
-        out = subprocess.check_output([PLANT_COLOUR_EXE, tmp_path, "--json"],
-                                      stderr=subprocess.STDOUT, timeout=5.0)
-        data = json.loads(out.decode().strip())
-        g, y, b = float(data.get("green",0)), float(data.get("yellow",0)), float(data.get("brown",0))
-        s = g + y + b
-        return {"green": 100*g/s, "yellow": 100*y/s, "brown": 100*b/s} if s>0 else {"green":0,"yellow":0,"brown":0}
-    finally:
-        try: os.remove(tmp_path)
-        except: pass
+    def __init__(self):
+        super().__init__()
+        # Create an rclpy node we’ll use for all ROS work
+        self._node = rclpy.create_node('mission_gui_node')
 
-def detect_colors(frame_bgr: np.ndarray) -> Dict[str, float]:
-    if USE_CPP_DETECTOR:
-        try:   return analyze_colors_bgr_cpp(frame_bgr)
-        except Exception as e:
-            print(f"[WARN] C++ detector failed, fallback to Python HSV: {e}", file=sys.stderr)
-    return analyze_colors_bgr_python(frame_bgr)
+        # Nav2 action client lives on the node
+        self._action_client = ActionClient(self._node, NavigateToPose, 'navigate_to_pose')
+        self._current_goal_handle = None
 
-def compute_ndvi_proxy_from_rgb(rgb_frame_bgr: np.ndarray) -> np.ndarray:
-    bgr = rgb_frame_bgr.astype(np.float32)
-    g = bgr[:,:,1]; r = bgr[:,:,2]
-    ndvi_star = (g - r) / (g + r + 1e-6)
-    return np.clip(ndvi_star, -1.0, 1.0)
+        # QoS and subs
+        qos = QoSProfile(depth=10)
+        qos.reliability = ReliabilityPolicy.BEST_EFFORT
+        qos.history = HistoryPolicy.KEEP_LAST
 
-def health_from_percentages(perc: Dict[str, float], ndvi: Optional[np.ndarray]=None) -> HealthResult:
-    g, y, br = perc.get("green",0.0), perc.get("yellow",0.0), perc.get("brown",0.0)
-    if USE_NDVI_GREEN_BOOST and (ndvi is not None):
-        high_ndvi_frac = float(np.mean(ndvi > 0.35)) * 100.0
-        g += 0.25 * high_ndvi_frac
-        s = g + y + br
-        if s > 0:
-            g, y, br = (100*g/s, 100*y/s, 100*br/s)
-    if g >= 60 and g >= y and g >= br: label = "Healthy"
-    elif br >= 25 and br >= g and br >= y: label = "Unhealthy"
-    elif y >= 30 and y >= g: label = "Needs Attention"
-    else: label = ["Healthy","Needs Attention","Unhealthy"][np.argmax([g,y,br])]
-    return HealthResult(round(g,1), round(y,1), round(br,1), label)
+        # Pose sources
+        self._node.create_subscription(PoseWithCovarianceStamped, '/amcl_pose', self._on_amcl_pose, 10)
+        self._node.create_subscription(Odometry, '/odom', self._on_odom, qos)
 
-def color_for_health(label: str) -> QtGui.QColor:
-    if label == "Healthy":         return QtGui.QColor(40,170,60)   # green
-    if label == "Needs Attention": return QtGui.QColor(220,190,40)  # yellow
-    if label == "Unhealthy":       return QtGui.QColor(210,50,50)   # red (driven by brown)
-    return QtGui.QColor(160,160,160)
+        # Map
+        self._node.create_subscription(OccupancyGrid, '/map', self._on_map, 10)
+        self._map_meta = None  # (res, w, h, origin_x, origin_y)
 
-# -------------- Widgets --------------
-class VideoWidget(QtWidgets.QLabel):
-    def __init__(self, title: str, parent=None):
-        super().__init__(parent)
-        self.setObjectName("video")
-        self.setProperty("role", "video")
-        self.setFixedSize(VIDEO_SIZE, VIDEO_SIZE)
-        self.setAlignment(QtCore.Qt.AlignCenter)
-        self.title = title
-    def show_frame(self, frame_bgr: np.ndarray, overlay_text: Optional[str]=None):
-        if frame_bgr is None: return
-        rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
-        qimg = QtGui.QImage(rgb.data, rgb.shape[1], rgb.shape[0], rgb.shape[1]*3, QtGui.QImage.Format_RGB888)
-        pix = QtGui.QPixmap.fromImage(qimg)
-        p = QtGui.QPainter(pix)
-        p.setPen(QtGui.QPen(QtGui.QColor("#222"))); p.setFont(QtGui.QFont("Inter",10,QtGui.QFont.Bold))
-        p.drawText(8,16,self.title)
-        if overlay_text:
-            p.setFont(QtGui.QFont("Inter",9)); p.drawText(8,32,overlay_text)
-        p.end()
-        self.setPixmap(pix.scaled(self.width(), self.height(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        # Optional: publish photo requests
+        self._photo_pub = self._node.create_publisher(String, '/mission/photo_request', 10)
 
-class PaintCanvas(QtWidgets.QWidget):
-    """Continuous paint panel. The bot moves in pixel steps; each move stamps a coloured brush."""
-    def __init__(self, size=CANVAS_SIZE, parent=None):
-        super().__init__(parent)
-        self.size_px = size
-        self.setFixedSize(size, size)
-        # Backing image we paint into (ARGB for transparency support)
-        self.buffer = QtGui.QImage(size, size, QtGui.QImage.Format_ARGB32_Premultiplied)
-        self.buffer.fill(QtCore.Qt.transparent)
-        # Bot state
-        self.x = size * 0.1  # start near bottom-left
-        self.y = size * 0.9
-        self.last_health = "Not Scanned"
-        self.setMouseTracking(True)
+        # Subscribe to plant scan results (string payload: CSV or JSON)
+        self._node.create_subscription(String, '/plant_scan_result', self._on_scan_result, 10)
 
-    def clear(self):
-        self.buffer.fill(QtCore.Qt.transparent)
-        self.update()
+    @property
+    def node(self):
+        return self._node
 
-    def set_bot(self, x: float, y: float):
-        self.x = max(0, min(self.size_px-1, x))
-        self.y = max(0, min(self.size_px-1, y))
-        self.update()
+    # ---------- Pose callbacks ----------
+    def _on_amcl_pose(self, msg: PoseWithCovarianceStamped):
+        x = msg.pose.pose.position.x
+        y = msg.pose.pose.position.y
+        q = msg.pose.pose.orientation
+        yaw = self._yaw_from_quat(q.x, q.y, q.z, q.w)
+        self.robotPoseUpdated.emit(x, y, yaw)
 
-    def stamp(self, color: QtGui.QColor):
-        """Paint a filled circle at the current bot position."""
-        painter = QtGui.QPainter(self.buffer)
-        painter.setRenderHint(QtGui.QPainter.Antialiasing)
-        painter.setBrush(QtGui.QBrush(color))
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.drawEllipse(QtCore.QPointF(self.x, self.y), BRUSH_RADIUS, BRUSH_RADIUS)
-        painter.end()
-        self.update()
+    def _on_odom(self, msg: Odometry):
+        x = msg.pose.pose.position.x
+        y = msg.pose.pose.position.y
+        q = msg.pose.pose.orientation
+        yaw = self._yaw_from_quat(q.x, q.y, q.z, q.w)
+        self.robotPoseUpdated.emit(x, y, yaw)
 
-    def paintEvent(self, e: QtGui.QPaintEvent):
-        p = QtGui.QPainter(self)
-        p.setRenderHint(QtGui.QPainter.Antialiasing)
-        # subtle background grid
-        p.fillRect(self.rect(), QtGui.QColor(234, 232, 226))  # match COL_BASE_BG
-        grid_pen = QtGui.QPen(QtGui.QColor(0,0,0,28)); p.setPen(grid_pen)
-        step = 24
-        for t in range(0, self.size_px+1, step):
-            p.drawLine(t, 0, t, self.size_px)
-            p.drawLine(0, t, self.size_px, t)
-        # painted trail
-        p.drawImage(0, 0, self.buffer)
-        # bot icon
-        p.setPen(QtGui.QPen(QtGui.QColor("#333"), 1))
-        p.setBrush(QtGui.QColor(COL_ACCENT))
-        r = 8
-        p.drawEllipse(QtCore.QPointF(self.x, self.y), r, r)
-        p.end()
+    # ---------- Map callback ----------
+    def _on_map(self, msg: OccupancyGrid):
+        res = msg.info.resolution
+        w   = msg.info.width
+        h   = msg.info.height
+        ox  = msg.info.origin.position.x
+        oy  = msg.info.origin.position.y
+        data = msg.data  # list[int] in [-1,100]
 
-# -------------- Main Window --------------
-class MainWindow(QtWidgets.QWidget):
-    def __init__(self, webcam_index=0, parent=None):
-        super().__init__(parent)
-        self.setObjectName("root")
-        self.setWindowTitle("Plant Health Console — Paint Panel + Wallbot (Teleop)")
+        # Render as RGB32 for easy qRgb writes
+        img = QtGui.QImage(w, h, QtGui.QImage.Format_RGB32)
+        for yy in range(h):
+            base = yy * w
+            for xx in range(w):
+                v = data[base + xx]
+                gray = 205 if v < 0 else int(255 - (v / 100.0) * 255)  # unknown=mid, occupied=dark
+                img.setPixel(xx, h - 1 - yy, QtGui.qRgb(gray, gray, gray))  # flip Y for screen coords
 
-        # Camera
-        self.cap = cv2.VideoCapture(webcam_index, cv2.CAP_ANY)
-        if not self.cap.isOpened(): self.cap = cv2.VideoCapture(webcam_index)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 960)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 540)
+        self._map_meta = (res, w, h, ox, oy)
+        self.mapUpdated.emit(img, ox, oy)
 
-        # Left: video stack
-        self.rgb_view  = VideoWidget("RGB (cropped 320×320)")
-        self.ndvi_view = VideoWidget("NDVI* (proxy, cropped)")
-        left = QtWidgets.QVBoxLayout()
-        left.setSpacing(8); left.setContentsMargins(6,6,6,6)
-        left.addWidget(self.rgb_view, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
-        left.addWidget(self.ndvi_view, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
-        left.addStretch(1)
+    # ---------- Actions ----------
+    def send_goal(self, wp: Waypoint):
+        if not self._action_client.server_is_ready():
+            self.goalStatus.emit('Nav2 action server not ready')
+            return
 
-        # Right: paint canvas
-        self.canvas = PaintCanvas(CANVAS_SIZE)
-        canvas_group = QtWidgets.QGroupBox("Plant Map (teleoperate to paint health along the wall)")
-        canvas_layout = QtWidgets.QVBoxLayout(canvas_group)
-        canvas_layout.setContentsMargins(6,2,6,6)
-        canvas_layout.addWidget(self.canvas, alignment=QtCore.Qt.AlignHCenter)
+        goal_msg = NavigateToPose.Goal()
+        goal_msg.pose = wp.to_pose_stamped()
+        goal_msg.pose.header.stamp = self._node.get_clock().now().to_msg()
 
-        help_label = QtWidgets.QLabel(
-            "Arrow keys move the wallbot and paint.\n"
-            "R = reset panel. First stamp occurs automatically after the first camera frame."
+        self.feedbackText.emit(f"Sending goal: {wp.name} @ ({wp.x:.2f}, {wp.y:.2f}) yaw {wp.yaw_deg:.1f}°")
+        fut = self._action_client.send_goal_async(
+            goal_msg,
+            feedback_callback=lambda fb: self._on_feedback(wp, fb)
         )
-        help_label.setWordWrap(True)
+        fut.add_done_callback(lambda f: self._on_goal_response(wp, f))
 
-        right = QtWidgets.QVBoxLayout()
-        right.setSpacing(8); right.setContentsMargins(8,6,8,8)
-        title = QtWidgets.QLabel("Controls & Status"); title.setObjectName("heading")
-        right.addWidget(title)
-        right.addWidget(canvas_group, 0)
-        right.addWidget(help_label)
+    def _on_goal_response(self, wp: Waypoint, fut):
+        self._current_goal_handle = fut.result()
+        if not self._current_goal_handle or not self._current_goal_handle.accepted:
+            self.goalStatus.emit(f"Goal rejected: {wp.name}")
+            return
+        self.goalStatus.emit(f"Goal accepted: {wp.name}")
+        rfut = self._current_goal_handle.get_result_async()
+        rfut.add_done_callback(lambda r: self._on_result(wp, r))
 
-        # Main layout
-        main = QtWidgets.QHBoxLayout(self)
-        main.setSpacing(8); main.setContentsMargins(8,8,8,8)
-        main.addLayout(left, 0)
-        main.addLayout(right, 1)
+    def _on_feedback(self, wp: Waypoint, feedback):
+        fb = feedback.feedback
+        dist = getattr(fb, 'distance_remaining', float('nan'))
+        self.feedbackText.emit(f"→ {wp.name}: remaining {dist:.2f} m")
 
-        # Teleop shortcuts
-        QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Up),    self, activated=lambda: self.move_and_paint( 0, -STEP_PX))
-        QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Down),  self, activated=lambda: self.move_and_paint( 0,  STEP_PX))
-        QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Left),  self, activated=lambda: self.move_and_paint(-STEP_PX, 0))
-        QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Right), self, activated=lambda: self.move_and_paint( STEP_PX, 0))
-        QtGui.QShortcut(QtGui.QKeySequence("R"),                 self, activated=self.reset_canvas)
+    def _on_result(self, wp: Waypoint, rfut):
+        status = rfut.result().status
+        if status == 4:  # STATUS_SUCCEEDED
+            self.goalStatus.emit(f"Reached: {wp.name}")
+            if wp.photo:
+                self._photo_pub.publish(String(data=f"Photo at {wp.name}"))
+                self.photoRequested.emit(wp.name)
+            # scanning happens externally; results come on /plant_scan_result
+        else:
+            self.goalStatus.emit(f"Goal finished with status={status} for {wp.name}")
 
-        # Buffers
-        self._last_rgb = None
-        self._last_ndvi = None
-        self._initial_stamp_done = False
+    def cancel_active_goal(self):
+        if self._current_goal_handle:
+            self._current_goal_handle.cancel_goal_async()
 
-        # Frame timer
-        self.frame_timer = QtCore.QTimer(self)
-        self.frame_timer.timeout.connect(self.update_frames)
-        self.frame_timer.start(40)
+    @staticmethod
+    def _yaw_from_quat(x, y, z, w) -> float:
+        siny_cosp = 2.0 * (w * z + x * y)
+        cosy_cosp = 1.0 - 2.0 * (y * y + z * z)
+        return math.atan2(siny_cosp, cosy_cosp)
 
-    # --- Helpers ---
-    def reset_canvas(self):
-        self.canvas.clear()
+    # ---------- Scan results ----------
+    def _on_scan_result(self, msg: String):
+        payload = msg.data.strip()
+        name = None; g=y=b=None
+        try:
+            if payload.startswith('{'):
+                import json
+                d = json.loads(payload)
+                name = d.get('name') or d.get('waypoint')
+                g = float(d.get('green', d.get('green_pct')))
+                y = float(d.get('yellow', d.get('yellow_pct')))
+                b = float(d.get('brown', d.get('brown_pct', d.get('red', 0))))
+            else:
+                # CSV: name,green,yellow,brown
+                parts = [p.strip() for p in payload.split(',')]
+                if len(parts) >= 4:
+                    name, g, y, b = parts[0], float(parts[1]), float(parts[2]), float(parts[3])
+        except Exception:
+            return
+        if name is not None and all(v is not None for v in (g,y,b)):
+            self.plantScanned.emit(name, g, y, b)
 
-    def move_and_paint(self, dx: int, dy: int):
-        # Move bot
-        self.canvas.set_bot(self.canvas.x + dx, self.canvas.y + dy)
-        # Stamp current classification color
-        self.stamp_current_color()
 
-    def update_frames(self):
-        ok, frame = self.cap.read()
-        if not ok or frame is None: return
-        crop = center_crop(frame, CROP_SIZE)
-        self._last_rgb = crop.copy()
-        ndvi_star = compute_ndvi_proxy_from_rgb(crop)
-        self._last_ndvi = ndvi_star
+# -----------------------------
+# Map View (QGraphicsView)
+# -----------------------------
+class MapView(QtWidgets.QGraphicsView):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setRenderHint(QtGui.QPainter.Antialiasing)
+        self._scene = QtWidgets.QGraphicsScene(self)
+        self.setScene(self._scene)
+        self._map_pixmap_item = None
+        self._origin = (0.0, 0.0)
+        self._resolution = 0.05  # default (used if map missing)
+        self._waypoints: List[Waypoint] = []
+        self._robot_pose = (0.0, 0.0, 0.0)
 
-        self.rgb_view.show_frame(crop, overlay_text="Arrow keys: move & paint | R: reset")
-        ndvi_vis = ((ndvi_star + 1.0) * 127.5).astype(np.uint8)
-        ndvi_vis = cv2.applyColorMap(ndvi_vis, cv2.COLORMAP_TURBO)
-        self.ndvi_view.show_frame(ndvi_vis)
+        # Icon sizing (tweak to taste)
+        self._robot_scale = 0.55
+        self._leaf_scale  = 0.50
 
-        if not self._initial_stamp_done:
-            self._initial_stamp_done = True
-            self.stamp_current_color()
+        # Icons
+        self._robot_pixmap: Optional[QtGui.QPixmap] = None
+        self._leaf_clear: Optional[QtGui.QPixmap] = None
+        self._leaf_green: Optional[QtGui.QPixmap] = None
+        self._leaf_yellow: Optional[QtGui.QPixmap] = None
+        self._leaf_red: Optional[QtGui.QPixmap] = None
+        self._scan: dict[str, tuple[float,float,float]] = {}
+        self._current_goal: Optional[tuple[float,float]] = None
 
-    def stamp_current_color(self):
-        if self._last_rgb is None: return
-        perc   = detect_colors(self._last_rgb)
-        result = health_from_percentages(perc, self._last_ndvi)
-        color  = color_for_health(result.health_label)
-        self.canvas.last_health = (f"{result.health_label} | "
-                                   f"G {result.perc_green:.1f}%  "
-                                   f"Y {result.perc_yellow:.1f}%  "
-                                   f"B {result.perc_brown:.1f}%")
-        self.canvas.setToolTip(self.canvas.last_health)
-        self.canvas.stamp(color)
+        # Smooth pan/zoom
+        self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
+        self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
 
-    def closeEvent(self, e: QtGui.QCloseEvent) -> None:
-        try: self.cap.release()
-        except: pass
-        return super().closeEvent(e)
+    def wheelEvent(self, event: QtGui.QWheelEvent) -> None:
+        factor = 1.25 if event.angleDelta().y() > 0 else 0.8
+        self.scale(factor, factor)
 
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    apply_theme(app)
-    win = MainWindow(webcam_index=0)
-    win.resize(*WINDOW_SIZE)
+    # --- Icon loaders ---
+    def load_robot_icon(self, path: str):
+        pm = QtGui.QPixmap(path)
+        self._robot_pixmap = pm if not pm.isNull() else None
+        self.redraw()
+
+    def set_leaf_icons(self, clear_path: str, green_path: str, yellow_path: str, red_path: str):
+        self._leaf_clear  = QtGui.QPixmap(clear_path)  if clear_path  else None
+        self._leaf_green  = QtGui.QPixmap(green_path)  if green_path  else None
+        self._leaf_yellow = QtGui.QPixmap(yellow_path) if yellow_path else None
+        self._leaf_red    = QtGui.QPixmap(red_path)    if red_path    else None
+        self.redraw()
+
+    def set_current_goal(self, x: Optional[float], y: Optional[float]):
+        self._current_goal = None if x is None or y is None else (x, y)
+        self.redraw()
+
+    def set_scan_result(self, name: str, green: float, yellow: float, brown: float):
+        self._scan[name] = (green, yellow, brown)
+        self.redraw()
+
+    def update_map(self, qimage: Optional[QtGui.QImage], origin_x: float, origin_y: float, resolution: Optional[float] = None):
+        if qimage is not None:
+            pix = QtGui.QPixmap.fromImage(qimage)
+            if self._map_pixmap_item is None:
+                self._map_pixmap_item = self._scene.addPixmap(pix)
+            else:
+                self._map_pixmap_item.setPixmap(pix)
+            # Place map so that world (origin_x,origin_y) -> scene (0,0)
+            if self._resolution != 0:
+                self._map_pixmap_item.setOffset(-origin_x / self._resolution, -(origin_y) / self._resolution)
+        if resolution:
+            self._resolution = resolution
+        self._origin = (origin_x, origin_y)
+        self.redraw()
+
+    def set_waypoints(self, wps: List[Waypoint]):
+        self._waypoints = wps
+        self.redraw()
+
+    def set_robot_pose(self, x: float, y: float, yaw: float):
+        self._robot_pose = (x, y, yaw)
+        self.redraw()
+
+    def world_to_scene(self, x: float, y: float) -> QtCore.QPointF:
+        # Convert world meters -> map pixels; assume 1/resolution pixels per meter
+        sx = (x - self._origin[0]) / self._resolution
+        sy = (y - self._origin[1]) / self._resolution
+        # Flip Y to match QGraphics coordinates (top-down)
+        return QtCore.QPointF(sx, -sy)
+
+    def redraw(self):
+        # Clear all items except the map pixmap (if present)
+        for item in list(self._scene.items()):
+            if item is not self._map_pixmap_item:
+                self._scene.removeItem(item)
+
+        pen_wp = QtGui.QPen(QtCore.Qt.darkCyan, 2)
+        pen_path = QtGui.QPen(QtCore.Qt.gray, 1, QtCore.Qt.DashLine)
+        pen_robot = QtGui.QPen(QtCore.Qt.red, 2)
+        brush_wp = QtGui.QBrush(QtCore.Qt.cyan)
+        brush_robot = QtGui.QBrush(QtCore.Qt.red)
+
+        # Draw path between waypoints
+        if len(self._waypoints) > 1:
+            for i in range(len(self._waypoints) - 1):
+                a = self.world_to_scene(self._waypoints[i].x, self._waypoints[i].y)
+                b = self.world_to_scene(self._waypoints[i + 1].x, self._waypoints[i + 1].y)
+                self._scene.addLine(QtCore.QLineF(a, b), pen_path)
+
+        # Draw waypoints (leaf icons + tooltip) — scaled & centered
+        for wp in self._waypoints:
+            p = self.world_to_scene(wp.x, wp.y)
+            pm = self._leaf_clear
+            tip = f"{wp.name}: not scanned"
+            if wp.name in self._scan:
+                g, y, b = self._scan[wp.name]
+                if self._leaf_green and g >= max(y, b):
+                    pm = self._leaf_green
+                elif self._leaf_yellow and y >= max(g, b):
+                    pm = self._leaf_yellow
+                elif self._leaf_red:
+                    pm = self._leaf_red
+                tip = f"{wp.name}:\n  green : {g:.1f}%\n  yellow: {y:.1f}%\n  brown : {b:.1f}%"
+            if pm is not None and not pm.isNull():
+                item = QtWidgets.QGraphicsPixmapItem(pm)
+                w = pm.width(); h = pm.height()
+                item.setTransformOriginPoint(w/2, h/2)
+                item.setScale(self._leaf_scale)
+                item.setRotation(0)            # leaves upright
+                item.setOffset(-w/2, -h/2)     # center in item coords
+                item.setPos(p)                 # then place at scene coords
+                item.setToolTip(tip)
+                self._scene.addItem(item)
+            else:
+                r = 0.15 / self._resolution
+                ellipse = self._scene.addEllipse(p.x()-r, p.y()-r, 2*r, 2*r, pen_wp, brush_wp)
+                ellipse.setToolTip(tip)
+
+        # Draw robot (ladybug fixed UP, scaled & centered)
+        rx, ry, rYaw = self._robot_pose
+        pr = self.world_to_scene(rx, ry)
+        if self._robot_pixmap is not None:
+            item = QtWidgets.QGraphicsPixmapItem(self._robot_pixmap)
+            w = self._robot_pixmap.width()
+            h = self._robot_pixmap.height()
+            item.setTransformOriginPoint(w/2, h/2)
+            item.setScale(self._robot_scale)
+            item.setRotation(0)        # always face up
+            item.setOffset(-w/2, -h/2) # center
+            item.setPos(pr)
+            self._scene.addItem(item)
+        else:
+            rr = 0.2 / self._resolution  # 20 cm radius in pixels
+            self._scene.addEllipse(pr.x() - rr, pr.y() - rr, 2 * rr, 2 * rr, pen_robot, brush_robot)
+
+# -----------------------------
+# Main Window (with theme + camera tiles)
+# -----------------------------
+class MissionWindow(QtWidgets.QMainWindow):
+    def __init__(self, ros: MissionRos):
+        super().__init__()
+        self.ros = ros
+        self.setWindowTitle("Mission GUI (Nav2 + Cameras)")
+        self.resize(1200, 800)
+
+        # ---- Theme ----
+        COL_BASE_BG   = "#EAE8E2"   # main background
+        COL_BORDER    = "#3A5A40"   # green border
+        COL_HEADING   = "#184E77"   # blue headings
+        COL_TEXT      = "#1B1B1B"
+        COL_PANEL     = "#F7F5EF"   # soft panel bg
+        COL_ACCENT    = "#2A9D8F"   # teal buttons
+        COL_ACCENT_D  = "#1F776C"   # hover
+
+        self.setStyleSheet(f"""
+            QMainWindow {{ background: {COL_BASE_BG}; }}
+            QGroupBox {{
+                border: 1px solid {COL_BORDER};
+                border-radius: 10px; margin-top: 10px; padding: 8px;
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin; left: 12px; padding: 2px 6px;
+                color: {COL_HEADING}; font-weight: 600; letter-spacing: 0.2px;
+            }}
+            QPushButton {{
+                background: {COL_ACCENT}; color: white; border: none;
+                border-radius: 10px; padding: 8px 12px;
+            }}
+            QPushButton:hover {{ background: {COL_ACCENT_D}; }}
+            QListWidget {{ background: {COL_PANEL}; border: 1px solid {COL_BORDER}; border-radius: 8px; }}
+            QLabel {{ color: {COL_TEXT}; }}
+        """)
+
+        # State
+        self._waypoints: List[Waypoint] = []
+        self._current_index = -1
+        self._loop = False
+        self._paused = False
+
+        # Root layout: splitter (left cameras, right mission+map)
+        splitter = QtWidgets.QSplitter()
+        splitter.setOrientation(QtCore.Qt.Horizontal)
+        self.setCentralWidget(splitter)
+
+        # Left: camera panel (RGB + Thermal stacked)
+        self.camera_panel = self._build_camera_panel()
+        splitter.addWidget(self.camera_panel)
+
+        # Right: mission controls + map
+        right = QtWidgets.QWidget()
+        right_layout = QtWidgets.QVBoxLayout(right)
+        splitter.addWidget(right)
+
+        # Mission controls
+        self.mission_group = QtWidgets.QGroupBox("Mission")
+        mg = QtWidgets.QGridLayout(self.mission_group)
+
+        self.btn_load = QtWidgets.QPushButton("Load Waypoints")
+        self.btn_start = QtWidgets.QPushButton("Start Mission")
+        self.btn_pause = QtWidgets.QPushButton("Pause")
+        self.btn_resume = QtWidgets.QPushButton("Resume")
+        self.btn_skip = QtWidgets.QPushButton("Skip →")
+        self.btn_cancel = QtWidgets.QPushButton("Cancel Goal")
+        self.chk_loop = QtWidgets.QCheckBox("Loop")
+
+        # Icon loaders (optional override at runtime)
+        self.btn_robot_icon = QtWidgets.QPushButton("Robot Icon…")
+        self.btn_plant_icon = QtWidgets.QPushButton("Plant Icon…")
+
+        self.list_wps = QtWidgets.QListWidget()
+        self.label_status = QtWidgets.QLabel("Status: idle")
+        self.label_feedback = QtWidgets.QLabel("Feedback: …")
+
+        row = 0
+        mg.addWidget(self.btn_load, row, 0)
+        mg.addWidget(self.chk_loop, row, 1)
+        row += 1
+        mg.addWidget(self.btn_start, row, 0)
+        mg.addWidget(self.btn_pause, row, 1)
+        row += 1
+        mg.addWidget(self.btn_resume, row, 0)
+        mg.addWidget(self.btn_skip, row, 1)
+        row += 1
+        mg.addWidget(self.btn_cancel, row, 0)
+        mg.addWidget(self.btn_robot_icon, row, 1)
+        row += 1
+        mg.addWidget(self.btn_plant_icon, row, 1)
+        row += 1
+        mg.addWidget(self.list_wps, row, 0, 1, 2)
+        row += 1
+        mg.addWidget(self.label_status, row, 0, 1, 2)
+        row += 1
+        mg.addWidget(self.label_feedback, row, 0, 1, 2)
+
+        right_layout.addWidget(self.mission_group)
+
+        # Map view
+        self.map_view = MapView()
+        right_layout.addWidget(self.map_view, 1)
+
+        # Signals
+        self.btn_load.clicked.connect(self.on_load)
+        self.btn_start.clicked.connect(self.on_start)
+        self.btn_pause.clicked.connect(self.on_pause)
+        self.btn_resume.clicked.connect(self.on_resume)
+        self.btn_skip.clicked.connect(self.on_skip)
+        self.btn_cancel.clicked.connect(self.on_cancel)
+        self.chk_loop.toggled.connect(self.on_loop)
+        self.btn_robot_icon.clicked.connect(self.on_pick_robot_icon)
+        self.btn_plant_icon.clicked.connect(self.on_pick_plant_icon)
+
+        # ROS → UI
+        self.ros.feedbackText.connect(self.on_feedback)
+        self.ros.goalStatus.connect(self.on_goal_status)
+        self.ros.robotPoseUpdated.connect(self.map_view.set_robot_pose)
+        self.ros.mapUpdated.connect(self._on_map_updated)
+        self.ros.photoRequested.connect(self._on_photo_requested)
+        self.ros.plantScanned.connect(self.on_scan_update)
+
+    # -------- Camera panel (RGB + Thermal only) --------
+    def _build_camera_panel(self) -> QtWidgets.QWidget:
+        def cam_tile(title: str) -> QtWidgets.QFrame:
+            frame = QtWidgets.QFrame()
+            frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+            frame.setStyleSheet("QFrame { background: #F7F5EF; border:1px solid #3A5A40; border-radius: 10px; }")
+            lay = QtWidgets.QVBoxLayout(frame)
+            hdr = QtWidgets.QLabel(title)
+            hdr.setStyleSheet("color:#184E77; font-weight:600;")
+            lbl = QtWidgets.QLabel("No feed yet")
+            lbl.setAlignment(QtCore.Qt.AlignCenter)
+            lbl.setStyleSheet("background:#222; color:#bbb; border-radius:8px; min-width:340px; min-height:220px;")
+            lay.addWidget(hdr)
+            lay.addWidget(lbl, 1)
+            return frame
+
+        w = QtWidgets.QWidget()
+        v = QtWidgets.QVBoxLayout(w)
+        title = QtWidgets.QLabel("Cameras")
+        title.setStyleSheet("font-weight: 700; font-size: 18px; color:#184E77")
+        v.addWidget(title)
+
+        # Stack vertically: RGB (top), Thermal (bottom)
+        v.addWidget(cam_tile("RGB"))
+        v.addWidget(cam_tile("Thermal"))
+
+        btns = QtWidgets.QHBoxLayout()
+        self.btn_cam_start = QtWidgets.QPushButton("Start Cameras")
+        self.btn_cam_stop  = QtWidgets.QPushButton("Stop Cameras")
+        btns.addWidget(self.btn_cam_start)
+        btns.addWidget(self.btn_cam_stop)
+        v.addLayout(btns)
+        v.addStretch(1)
+        return w
+
+    # -------- Mission logic --------
+    def on_load(self):
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open Waypoints CSV", "", "CSV Files (*.csv);;All Files (*)")
+        if not path:
+            return
+        try:
+            wps = self._read_csv(path)
+            self._waypoints = wps
+            self._current_index = -1
+            self.list_wps.clear()
+            for wp in wps:
+                self.list_wps.addItem(f"{wp.name}  (x={wp.x:.2f}, y={wp.y:.2f}, yaw={wp.yaw_deg:.0f}°, {wp.frame_id})")
+            self.map_view.set_waypoints(wps)
+
+            # Default icons from your icon folder
+            icon_dir = "/home/anton/ros2_ws/src/Wallbug/src/icon"
+            self.map_view.load_robot_icon(os.path.join(icon_dir, "ladybug.png"))
+            self.map_view.set_leaf_icons(
+                clear_path=os.path.join(icon_dir, "images.png"),
+                green_path=os.path.join(icon_dir, "green-leaf.png"),
+                yellow_path=os.path.join(icon_dir, "yellow-leaf.png"),
+                red_path=os.path.join(icon_dir, "red-leaf.png"),
+            )
+
+            self.label_status.setText(f"Status: loaded {len(wps)} waypoints")
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Load Error", str(e))
+
+    def _read_csv(self, path: str) -> List[Waypoint]:
+        wps: List[Waypoint] = []
+        with open(path, 'r', newline='') as f:
+            reader = csv.DictReader(f)
+            required = {'name', 'x', 'y', 'yaw_deg'}
+            if not required.issubset(reader.fieldnames or {}):
+                raise ValueError(f"CSV must contain headers: {sorted(required)}")
+            for row in reader:
+                name = row.get('name', '').strip() or f"wp{len(wps)+1}"
+                x = float(row.get('x', 0))
+                y = float(row.get('y', 0))
+                yaw_deg = float(row.get('yaw_deg', 0))
+                frame_id = (row.get('frame_id') or 'map').strip()
+                hold_sec = float(row.get('hold_sec', 0) or 0)
+                photo = str(row.get('photo', 'false')).lower() in ('1', 'true', 'yes')
+                wps.append(Waypoint(name, x, y, yaw_deg, frame_id, hold_sec, photo))
+        if not wps:
+            raise ValueError("No waypoints found in CSV")
+        return wps
+
+    def on_start(self):
+        if not self._waypoints:
+            QtWidgets.QMessageBox.warning(self, "No waypoints", "Load a waypoint file first.")
+            return
+        if self._paused and 0 <= self._current_index < len(self._waypoints):
+            self._paused = False
+            self.label_status.setText("Status: resumed")
+            return
+        self._current_index = 0
+        self._dispatch_current_goal()
+
+    def _dispatch_current_goal(self):
+        if not (0 <= self._current_index < len(self._waypoints)):
+            if self._loop and self._waypoints:
+                self._current_index = 0
+            else:
+                self.label_status.setText("Status: mission complete")
+                self.map_view.set_current_goal(None, None)
+                return
+        wp = self._waypoints[self._current_index]
+        self.list_wps.setCurrentRow(self._current_index)
+        self.label_status.setText(f"Status: navigating to {wp.name}")
+        self.map_view.set_current_goal(wp.x, wp.y)
+        self.ros.send_goal(wp)
+
+    def on_pause(self):
+        self._paused = True
+        self.label_status.setText("Status: paused (goal continues until cancelled)")
+
+    def on_resume(self):
+        if self._paused:
+            self._paused = False
+            self.label_status.setText("Status: resumed")
+
+    def on_skip(self):
+        self._current_index += 1
+        self._dispatch_current_goal()
+
+    def on_cancel(self):
+        self.ros.cancel_active_goal()
+        self.map_view.set_current_goal(None, None)
+        self.label_status.setText("Status: goal cancelled")
+
+    def on_loop(self, checked: bool):
+        self._loop = checked
+
+    # -------- ROS→UI callbacks --------
+    def on_goal_status(self, text: str):
+        self.label_status.setText(f"Status: {text}")
+        if text.startswith("Reached:"):
+            hold = 0
+            if 0 <= self._current_index < len(self._waypoints):
+                hold = self._waypoints[self._current_index].hold_sec
+            QtCore.QTimer.singleShot(int(hold * 1000), self._advance_after_reach)
+
+    def _advance_after_reach(self):
+        if not self._paused:
+            self._current_index += 1
+            self._dispatch_current_goal()
+
+    def on_feedback(self, text: str):
+        self.label_feedback.setText(f"Feedback: {text}")
+
+    def _on_map_updated(self, qimage: QtGui.QImage, origin_x: float, origin_y: float):
+        self.map_view.update_map(qimage, origin_x, origin_y)
+
+    def _on_photo_requested(self, name: str):
+        print(f"[Mission] Photo requested at waypoint: {name}")
+
+    # Scan update from ROS topic
+    def on_scan_update(self, name: str, green: float, yellow: float, brown: float):
+        self.map_view.set_scan_result(name, green, yellow, brown)
+
+    # --- Icon pickers (optional overrides) ---
+    def on_pick_robot_icon(self):
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Robot Icon (PNG)", "", "Images (*.png *.jpg *.svg)")
+        if path:
+            self.map_view.load_robot_icon(path)
+
+    def on_pick_plant_icon(self):
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Plant Icon (PNG)", "", "Images (*.png *.jpg *.svg)")
+        if path:
+            self.map_view.set_leaf_icons(path, path, path, path)
+
+
+# -----------------------------
+# rclpy <-> Qt integration
+# -----------------------------
+class RosQtApp(QtWidgets.QApplication):
+    def __init__(self, argv):
+        super().__init__(argv)
+        rclpy.init(args=None)
+        self._ros = MissionRos()
+
+        # Spin rclpy regularly without a dedicated thread
+        self._spin_timer = QtCore.QTimer()
+        self._spin_timer.timeout.connect(self._spin_once)
+        self._spin_timer.start(20)  # 50 Hz
+
+    def _spin_once(self):
+        rclpy.spin_once(self._ros.node, timeout_sec=0.001)
+
+    def ros_node(self) -> MissionRos:
+        return self._ros
+
+    def quit(self) -> None:
+        try:
+            self._spin_timer.stop()
+            self._ros.node.destroy_node()
+            rclpy.shutdown()
+        finally:
+            super().quit()
+
+
+# -----------------------------
+# Main entry
+# -----------------------------
+if __name__ == '__main__':
+    app = RosQtApp(sys.argv)
+    win = MissionWindow(app.ros_node())
     win.show()
     sys.exit(app.exec())
-
-if __name__ == "__main__":
-    main()

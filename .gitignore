@@ -1,0 +1,22 @@
+# Python cache and build
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+*.log
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+
+# ROS build folders
+install/
+log/
+build/
