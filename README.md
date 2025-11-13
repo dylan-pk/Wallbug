@@ -150,19 +150,24 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
    ```bash
    pip install -r requirements.txt
    ```
+   
+3. Launch Gazebo and GUI:
+   ```bash
+   ros2 launch Wallbot_tl_root bringup.launch.py
+   ```
 
-3. Run the Wallbot UI demo:  
+4. Run the Wallbot UI demo:  
    ```bash
    python ui/main.py
    ```
-4. Run the Wallbot demo:  
+5. Run the Wallbot demo:  
    ```bash
    colcon build --packages-select wallbot
    source install/setup.bash
    python3 src/Wallbug/src/demo.py
    ```
-  
 
+  
 ---
 
 ![Team](https://img.shields.io/badge/Team_%26_Contributors-%23184E77?style=for-the-badge&logoColor=white)
