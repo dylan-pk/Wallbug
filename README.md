@@ -66,14 +66,12 @@ It demonstrates the integration of mechanical, electrical, and software subsyste
 
 | Deliverable ID | Description | Status |
 |:--------------:|:--------------|:-------:|
-| **D.1b** | Framework for the UI displaying on-board mock-up of sensors | ☐ |
-| **D.2b** | A simulation demonstrating the Wallbot’s movement along a pre-planned path and a code framework for wireless communication | ☐ |
-| **D.3b** | Upgraded mechanical shell to facilitate nicer wire management and durability | ☐ |
-| **D.4** | Supplying all documentation files to Client (Marc) in the handover | ☐ |
-| **D.5** | Supplying all CAD files to Client (Marc) in the handover | ☐ |
-| **D.6** | Supplying all code files to Client (Marc) in the handover | ☐ |
-
-  "✅Completed" _will populate the "Status" column upon handover_  
+| **D.1b** | Framework for the UI displaying on-board mock-up of sensors | ✅Completed |
+| **D.2b** | A simulation demonstrating the Wallbot’s movement along a pre-planned path and a code framework for wireless communication | ✅Completed |
+| **D.3b** | Upgraded mechanical shell to facilitate nicer wire management and durability | ✅Completed |
+| **D.4** | Supplying all documentation files to Client (Marc) in the handover | ✅Completed |
+| **D.5** | Supplying all CAD files to Client (Marc) in the handover | ✅Completed |
+| **D.6** | Supplying all code files to Client (Marc) in the handover | ✅Completed |
   
 ---
 
@@ -203,12 +201,13 @@ All supporting materials, including CAD files, technical documentation, and meet
 
 ![Handover](https://img.shields.io/badge/Handover_Completion-%233A5A40?style=for-the-badge&logoColor=white)
 
-~~The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 Novemeber 2025** by **The Wallbug Team**.~~  
+The **Wallbot System Development** project was formally handed over to the client, **Marc Carmichael** (UTS Robotics Institute), at **1:00 PM AEST on Monday, 13 Novemeber 2025** by **The Wallbug Team**.  
 This delivery marks the completion of work as specified in:  
 - _Project Scope and Specifications – Rev E (Signed)_  
-- _Project Handover Plan – Rev B (Signed)_  
+- _Project Handover Plan – Rev B (Signed)_   
+- _Project Handover_
 
-~~All deliverables (D.1b - D.3b & D.4 – D.6) were demonstrated, verified, and accepted by the client in accordance with the final handover criteria.~~  
+All deliverables (D.1b - D.3b & D.4 – D.6) were demonstrated, verified, and accepted by the client in accordance with the final handover criteria.  
 
 ---
 
