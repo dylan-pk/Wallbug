@@ -1,6 +1,7 @@
 # 🌱 Wallbot System Development  
 
 ---
+<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7398840787922427904?compact=1" height="399" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
 
 ![Overview](https://img.shields.io/badge/Overview-%23184E77?style=for-the-badge&logoColor=white)
 
